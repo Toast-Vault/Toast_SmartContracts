@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.6.10;
 
-import {Script} from "forge-std/Script.sol";
+import {Script, console} from "forge-std/Script.sol";
 import {PriceOracle} from "../src/set-tokens-v2/protocol/PriceOracle.sol";
 import {IController} from "../src/set-tokens-v2/interfaces/IController.sol";
 import {IOracle} from "../src/set-tokens-v2/interfaces/IOracle.sol";
@@ -9,18 +9,12 @@ import {IOracle} from "../src/set-tokens-v2/interfaces/IOracle.sol";
 contract DeployController is Script {
     IController controller;
     address masterQuoteAsset;
+    address[] _adapters;
+    address[] _assetOnes;
+    address[] _assetTwos;
+    IOracle[] _oracles;
 
-    constructor(address _controller, address _masterQuoteAsset) public {
-        controller = IController(_controller);
-        masterQuoteAsset = _masterQuoteAsset;
-    }
-
-    function deployPriceOracle(
-        address[] memory _adapters,
-        address[] memory _assetOnes,
-        address[] memory _assetTwos,
-        IOracle[] memory _oracles
-    ) public {
+    function run() external {
         vm.startBroadcast();
         PriceOracle priceOracle = new PriceOracle(
             controller,
@@ -31,10 +25,6 @@ contract DeployController is Script {
             _oracles
         );
         vm.stopBroadcast();
-        return priceOracle;
-    }
-
-    function run() external returns (PriceOracle controller) {
-        return deployPriceOracle();
+        console.log("Price oracle: %s", address(priceOracle));
     }
 }

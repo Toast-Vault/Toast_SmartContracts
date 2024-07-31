@@ -1,19 +1,30 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity 0.8.18;
+pragma solidity 0.6.10;
 
-import {Script} from "forge-std/Script.sol";
-import {Controller} from "../src/setToken-contracts/Controller.sol";
+import {Script, console} from "forge-std/Script.sol";
+import {PriceOracle} from "../src/set-tokens-v2/protocol/PriceOracle.sol";
+import {IController} from "../src/set-tokens-v2/interfaces/IController.sol";
+import {IOracle} from "../src/set-tokens-v2/interfaces/IOracle.sol";
 
 contract DeployController is Script {
-    address feeAddress = address(0);
+    IController controller;
+    address masterQuoteAsset;
+    address[] _adapters;
+    address[] _assetOnes;
+    address[] _assetTwos;
+    IOracle[] _oracles;
 
-    function deployController(address feeAddress) public{
+    function run() external {
         vm.startBroadcast();
-        Controller controller = new Controller(feeAddress);
+        PriceOracle priceOracle = new PriceOracle(
+            controller,
+            masterQuoteAsset,
+            _adapters,
+            _assetOnes,
+            _assetTwos,
+            _oracles
+        );
         vm.stopBroadcast();
-    }
-
-    function run() external retunrs(Controller controller){
-        return deployController();
+        console.log("Price oracle: %s", address(priceOracle));
     }
 }

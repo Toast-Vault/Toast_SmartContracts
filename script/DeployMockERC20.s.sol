@@ -26,8 +26,3 @@ contract DeployMockErc20 is Script {
         return mockToken;
     }
 }
-
-// forge create src/mock/StandardTokenMock.sol:StandardTokenMock \
-// --rpc-url 127.0.0.1:8545 \
-// --constructor-args 0xf65e0Fd0C77B1182670dD23F8D341c78516C0BB2 100000 "?M" "m" 18 \
-// --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80

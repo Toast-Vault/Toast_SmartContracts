@@ -68,6 +68,8 @@ $ cast --help
 
 ### Mock token Contracts
 
+#### WETH: [0x295349FBB6de65686382b20189632434894Ebe42](https://sepolia.etherscan.io/address/0x295349FBB6de65686382b20189632434894Ebe42)
+
 #### Mock-DAI: [0x48feC5d47182698Ec10D1c258d90dC9dB142de41](https://sepolia.etherscan.io/address/0x48feC5d47182698Ec10D1c258d90dC9dB142de41)
 
 #### Mock-USDC: [0x473a827b9B50b2a8A711493C9F80CFeE96f3Be97](https://sepolia.etherscan.io/address/0x473a827b9B50b2a8A711493C9F80CFeE96f3Be97)
@@ -88,6 +90,11 @@ $ cast --help
 
 #### Price Oracle: [0x49ad1B642318202A5b20513B826918A328D8D6E4](https://sepolia.etherscan.io/address/0x012d6bC94051C3b9F923c043A51D381903EAC16A)
 
+### Modules
+
+#### BasicIssuanceModule: [0x38ea574b6dc8229575b195cf77cecc3c1749e5e5](https://sepolia.etherscan.io/address/0x38ea574b6dc8229575b195cf77cecc3c1749e5e5)
+
+#### GeneralIndexModule:[]()
 
 ### Chainlink oracle adpater
 

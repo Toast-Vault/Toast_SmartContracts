@@ -17,3 +17,8 @@ deploy-sepolia-setTokenCreator:
 deploy-sepolia-setValuer:
 	forge script script/set-tokens-core/DeploySetValuer.s.sol:DeploySetValuer --rpc-url $(SEPLOIA_URL) --private-key $(PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
 
+deploy-sepolia-oracleAdpter:
+	forge script script/DeployOracleAdapter.s.sol:DeployOracleAdapter --rpc-url $(SEPLOIA_URL) --private-key $(PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
+
+deploy-sepolia-PriceOracle:
+	forge script script/DeployPriceOracle.s.sol:DeployPriceOracle --rpc-url $(SEPLOIA_URL) --private-key $(PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv

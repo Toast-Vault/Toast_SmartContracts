@@ -66,6 +66,20 @@ $ cast --help
 ```
 ## Sepolia Testnet
 
+### Token Set
+
+#### [0xB68fAf1AF36ff8D20E9Eb288256e6BF2A3650992](https://sepolia.etherscan.io/address/0xB68fAf1AF36ff8D20E9Eb288256e6BF2A3650992)
+##### Above contract created at [tx](https://sepolia.etherscan.io/tx/0xdb237de0b2a74a6d47a504bba1362dab946e2175cbe500d5ec59c8dc450c843b)
+
+####	Name	Type	Data
+    0	_components	address[]	[0x473a827b9B50b2a8A711493C9F80CFeE96f3Be97,0x714F7a3d1A3F33fB09CE13f5033C0E576Cd0cE8e,         0x5865665E51cA79A6462a88A14179056C73F681E1]
+    1	_units	int256[]	[50000000000000000000,10000000000000000,25000000000000000000]
+    2	_modules	address[]	[0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5,0x6D06248e18d2A713912CeDE4203213ce15307Ca0]
+    3	_manager	address	0xc188653c4755C71b09d0CBB2CBD24d7b915F8083
+    4	_name	string	USDC_BTC_LINK
+    5	_symbol	string	UBL
+
+
 ### Mock token Contracts
 
 #### WETH: [0x295349FBB6de65686382b20189632434894Ebe42](https://sepolia.etherscan.io/address/0x295349FBB6de65686382b20189632434894Ebe42)

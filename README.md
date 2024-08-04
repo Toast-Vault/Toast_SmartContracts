@@ -94,7 +94,7 @@ $ cast --help
 
 #### BasicIssuanceModule: [0x38ea574b6dc8229575b195cf77cecc3c1749e5e5](https://sepolia.etherscan.io/address/0x38ea574b6dc8229575b195cf77cecc3c1749e5e5)
 
-#### GeneralIndexModule:[]()
+#### GeneralIndexModule:[0x6D06248e18d2A713912CeDE4203213ce15307Ca0](https://sepolia.etherscan.io/address/0x6D06248e18d2A713912CeDE4203213ce15307Ca0) Not verified yet.
 
 ### Chainlink oracle adpater
 

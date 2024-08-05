@@ -3,12 +3,12 @@ pragma solidity 0.6.10;
 
 import {Script, console} from "forge-std/Script.sol";
 import {ContractAddresses} from "./helper/ContractAddresses.sol";
-import {SetTokenCreator} from "../../src/set-tokens-v2/protocol/SetTokenCreator.sol";
-import {BasicIssuanceModule} from "../../src/set-tokens-v2/protocol/modules/v1/BasicIssuanceModule.sol";
-import {GeneralIndexModule} from "../../src/set-tokens-v2/protocol/modules/v1/GeneralIndexModule.sol";
-import {ISetToken} from "../../src/set-tokens-v2/interfaces/ISetToken.sol";
-import {IManagerIssuanceHook} from "../../src/set-tokens-v2/interfaces/IManagerIssuanceHook.sol";
-import {IController} from "../../src/set-tokens-v2/interfaces/IController.sol";
+import {SetTokenCreator} from "@setToken/contracts/protocol/SetTokenCreator.sol";
+import {BasicIssuanceModule} from "@setToken/contracts/protocol/modules/v1/BasicIssuanceModule.sol";
+import {GeneralIndexModule} from "@setToken/contracts/protocol/modules/v1/GeneralIndexModule.sol";
+import {ISetToken} from "@setToken/contracts/interfaces/ISetToken.sol";
+import {IManagerIssuanceHook} from "@setToken/contracts/interfaces/IManagerIssuanceHook.sol";
+import {IController} from "@setToken/contracts/interfaces/IController.sol";
 
 // Utilise this script to make new tokenSet
 // Set tokens already deployed with below components and manager.

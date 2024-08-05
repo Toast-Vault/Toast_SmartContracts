@@ -106,7 +106,7 @@ $ cast --help
 
 ### Modules
 
-#### BasicIssuanceModule: [0x38ea574b6dc8229575b195cf77cecc3c1749e5e5](https://sepolia.etherscan.io/address/0x38ea574b6dc8229575b195cf77cecc3c1749e5e5)
+#### BasicIssuanceModule: [0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5](https://sepolia.etherscan.io/address/0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5)
 
 #### GeneralIndexModule:[0x6D06248e18d2A713912CeDE4203213ce15307Ca0](https://sepolia.etherscan.io/address/0x6D06248e18d2A713912CeDE4203213ce15307Ca0) Not verified yet.
 

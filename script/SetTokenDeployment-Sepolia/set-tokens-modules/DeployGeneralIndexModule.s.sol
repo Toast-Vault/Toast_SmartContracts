@@ -2,9 +2,9 @@
 pragma solidity 0.6.10;
 
 import {Script, console} from "forge-std/Script.sol";
-import {GeneralIndexModule} from "../../src/set-tokens-v2/protocol/modules/v1/GeneralIndexModule.sol";
-import {IController} from "../../src/set-tokens-v2/interfaces/IController.sol";
-import {IWETH} from "../../src/set-tokens-v2/interfaces/external/IWETH.sol";
+import {GeneralIndexModule} from "@setToken/contracts/protocol/modules/v1/GeneralIndexModule.sol";
+import {IController} from "@setToken/contracts/interfaces/IController.sol";
+import {IWETH} from "@setToken/contracts/interfaces/external/IWETH.sol";
 
 contract DeployGeneralIndexModule is Script {
     IController controller =
@@ -12,7 +12,10 @@ contract DeployGeneralIndexModule is Script {
     IWETH wEth = IWETH(0x295349FBB6de65686382b20189632434894Ebe42);
 
     function run() external returns (GeneralIndexModule) {
-        vm.startBroadcast();
+        uint256 deployerPrivateKey = vm.envUint(
+            "SET_TOKEN_MANAGER_PRIVATE_KEY"
+        );
+        vm.startBroadcast(deployerPrivateKey);
         GeneralIndexModule generalIndexModule = new GeneralIndexModule(
             controller,
             wEth

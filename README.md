@@ -110,6 +110,8 @@ $ cast --help
 
 #### GeneralIndexModule:[0x6D06248e18d2A713912CeDE4203213ce15307Ca0](https://sepolia.etherscan.io/address/0x6D06248e18d2A713912CeDE4203213ce15307Ca0) Not verified yet.
 
+#### CustomOracleNavIssuanceModule: [0x392F1587db195283E247CeECe541c6a744C3E7D7](https://sepolia.etherscan.io/address/0x392f1587db195283e247ceece541c6a744c3e7d7)
+
 ### Chainlink oracle adpater
 
 #### USDC-USD adpter [0xE3e0c9a4f088C754c381d161d67A596721E613aB](https://sepolia.etherscan.io/address/0xE3e0c9a4f088C754c381d161d67A596721E613aB)

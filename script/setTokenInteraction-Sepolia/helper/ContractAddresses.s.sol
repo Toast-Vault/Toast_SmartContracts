@@ -14,7 +14,7 @@ import {ISetValuer} from "@setToken/contracts/interfaces/ISetValuer.sol";
 abstract contract ContractAddresses {
     // SetToken address
     ISetToken usdcBtcLink =
-        ISetToken(0xB68fAf1AF36ff8D20E9Eb288256e6BF2A3650992);
+        ISetToken(0x6ecF9bBf7038c6Ca131fC73197B89993942eb5bb);
 
     IWETH wEth = IWETH(0x295349FBB6de65686382b20189632434894Ebe42);
     address mockDAI = 0x48feC5d47182698Ec10D1c258d90dC9dB142de41;

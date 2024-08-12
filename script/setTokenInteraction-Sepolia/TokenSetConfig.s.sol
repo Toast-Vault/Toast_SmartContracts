@@ -24,6 +24,8 @@ contract TokenSetConfig is Script, ContractAddresses {
         setManagerTokenSet(tokenSetManager, tokenSetManagerPrivateKey);
         getControllerManager();
         getTokenSetManager();
+        isModulePending(address(usdcBtcLink), generalIndexModuleAddress);
+        getModules(address(usdcBtcLink));
     }
 
     function setManagerController(
@@ -55,5 +57,22 @@ contract TokenSetConfig is Script, ContractAddresses {
         SetToken setToken = SetToken(payable(address(usdcBtcLink)));
         address owner = setToken.manager();
         console.log("Set token manager: %s", owner);
+    }
+
+    function isModulePending(
+        address setTokenAdd,
+        address module
+    ) public view returns (bool) {
+        SetToken setToken = SetToken(payable(setTokenAdd));
+        bool isPending = setToken.isPendingModule(module);
+        console.log("Is %s module pending? %s", module, isPending);
+    }
+
+    function getModules(address setTokenAdd) public view {
+        SetToken setToken = SetToken(payable(setTokenAdd));
+        address[] memory modules = setToken.getModules();
+        for (uint256 i = 0; i < modules.length; i++) {
+            console.log(modules[i]);
+        }
     }
 }

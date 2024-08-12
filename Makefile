@@ -2,6 +2,9 @@
 
 build:; forge build
 
+deploy-sepolia-fork:
+	anvil --rpc-url $(SEPOLIA_URL)
+
 deploy-sepolia-mERC20:
 	forge script script/setTokenDeployment-Sepolia/MockERC20/DeployMockERC20.s.sol:DeployMockErc20 --rpc-url $(SEPOLIA_URL) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
 

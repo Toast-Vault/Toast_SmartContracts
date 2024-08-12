@@ -15,19 +15,14 @@ import {IController} from "@setToken/contracts/interfaces/IController.sol";
 // Edit components and units to deploy with different ratio.
 
 contract DeploySetToken is Script, ContractAddresses {
-    address manager = 0xc188653c4755C71b09d0CBB2CBD24d7b915F8083;
-    string name = "USDC_BTC_LINK";
-    string symbol = "UBL";
+    string name = "BTC_USDC_LINK";
+    string symbol = "BUL";
     address[] components = [mockUSDC, mockWBTC, mockLINK];
     address[] modules = [
         address(basicIssuanceModuleAddress),
         address(generalIndexModuleAddress)
     ];
-    int256[] units = [
-        50e18 /*50 USDC*/,
-        1e16 /*0.001 WBTC*/,
-        25e18 /*25 LINK*/
-    ];
+    int256[] units = [50e6 /*50 USDC*/, 1e16 /*0.01 WBTC*/, 25e18 /*25 LINK*/];
 
     function run() external {
         // Private has to be of the manager address mentioned above. Edit it accordingly.
@@ -47,7 +42,7 @@ contract DeploySetToken is Script, ContractAddresses {
             address(setTokenCreatorAddress)
         );
         address setTokenAddress;
-
+        address manager = vm.addr(privateKey);
         vm.startBroadcast(privateKey);
         setTokenAddress = controller.create(
             components,
@@ -58,7 +53,6 @@ contract DeploySetToken is Script, ContractAddresses {
             symbol
         );
         console.log("Set created: %s", setTokenAddress);
-        //console.log(sets);
         vm.stopBroadcast();
         return setTokenAddress;
     }

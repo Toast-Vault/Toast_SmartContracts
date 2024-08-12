@@ -10,7 +10,9 @@ import {CustomOracleNavIssuanceModule} from "@setToken/contracts/protocol/module
 import {INAVIssuanceHook} from "@setToken/contracts/interfaces/INAVIssuanceHook.sol";
 import {ISetValuer} from "@setToken/contracts/interfaces/ISetValuer.sol";
 
-contract TokenSetConfig is Script, ContractAddresses {
+// Use this script to mint 1 new settokens.
+// forge script script/setTokenInteraction-Sepolia/MintSetTokens.s.sol --rpc-url $SEPOLIA_URL --broadcast
+contract MintSetTokens is Script, ContractAddresses {
     uint256 mintTokenn = 1;
 
     function run() external {
@@ -44,8 +46,17 @@ contract TokenSetConfig is Script, ContractAddresses {
         SetValuer setValuer = SetValuer(address(setValuerAddress));
         uint256 price = setValuer.calculateSetTokenValuation(
             usdcBtcLink,
-            mockUSDC
+            address(wEth)
         );
-        console.log("SetToken price in USDC: %s", price);
+        console.log("SetToken price in ETH: %s", price);
+
+        price = setValuer.calculateSetTokenValuation(usdcBtcLink, mockWBTC);
+        console.log("SetToken price in BTC: %s", price);
+
+        price = setValuer.calculateSetTokenValuation(usdcBtcLink, mockDAI);
+        console.log("SetToken price in DAI: %s", price / 1e18);
+
+        price = setValuer.calculateSetTokenValuation(usdcBtcLink, mockUSDC);
+        console.log("SetToken price in USDC: %s", price / 1e18);
     }
 }

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.6.10;
-//we need to use diff script with 0.6.20 versio to interact with setToken
+
 import {Script, console} from "forge-std/Script.sol";
 import {SetToken} from "@setToken/contracts/protocol/SetToken.sol";
 import {ContractAddresses} from "./helper/ContractAddresses.s.sol";

@@ -13,9 +13,9 @@ abstract contract ContractAddresses {
     IController controller =
         IController(0x9Df9fef12Fa512315CC9F3e5C1D2faFf1bB04a72);
 
-    IOracle usdc_usd = IOracle(0xE3e0c9a4f088C754c381d161d67A596721E613aB);
-    IOracle dai_usdc = IOracle(0x5934DE42541C7eF4860095d37344B71042c1706C);
-    IOracle eth_usd = IOracle(0x49ad1B642318202A5b20513B826918A328D8D6E4);
-    IOracle wbtc_usd = IOracle(0x295349FBB6de65686382b20189632434894Ebe42);
-    IOracle link_usd = IOracle(0x0a2658f1Fb8C8b734635A49dE6209c243c42b7F0);
+    IOracle usdc_usd = IOracle(0xd9DC501B9E4437683ABfe83B377748Af7265b562);
+    IOracle dai_usdc = IOracle(0xdc51ab0258B5ff93E2CEea0cf6aAD6937E346FE0);
+    IOracle eth_usd = IOracle(0xeD7A35c4Ee06ea4e3203471d1b022019849F8EDA);
+    IOracle wbtc_usd = IOracle(0x5920257792dBba08dfadD34607B781E3C2CDb3cF);
+    IOracle link_usd = IOracle(0x6aE07395E64A0bEd5529e170C1A0b667E05D4Ad3);
 }

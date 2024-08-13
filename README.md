@@ -68,16 +68,19 @@ $ cast --help
 
 ### Token Set
 
-#### [0xB68fAf1AF36ff8D20E9Eb288256e6BF2A3650992](https://sepolia.etherscan.io/address/0xB68fAf1AF36ff8D20E9Eb288256e6BF2A3650992)
-##### Above contract created at [tx](https://sepolia.etherscan.io/tx/0xdb237de0b2a74a6d47a504bba1362dab946e2175cbe500d5ec59c8dc450c843b)
+#### [0xd995E679A577C29Ad7E06d1e3d194c961930E590](https://sepolia.etherscan.io/address/0xd995E679A577C29Ad7E06d1e3d194c961930E590)
+##### Above contract created at [tx](https://sepolia.etherscan.io/tx/0x9514876761298121a18502ac509d654e5df1eff1b7f1b12a34f9b82b5d6bc953)
 
-####	Name	Type	Data
-    0	_components	address[]	[0x473a827b9B50b2a8A711493C9F80CFeE96f3Be97,0x714F7a3d1A3F33fB09CE13f5033C0E576Cd0cE8e,         0x5865665E51cA79A6462a88A14179056C73F681E1]
-    1	_units	int256[]	[50000000000000000000,10000000000000000,25000000000000000000]
-    2	_modules	address[]	[0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5,0x6D06248e18d2A713912CeDE4203213ce15307Ca0]
-    3	_manager	address	0xc188653c4755C71b09d0CBB2CBD24d7b915F8083
-    4	_name	string	USDC_BTC_LINK
-    5	_symbol	string	UBL
+####    Transactions
+    "function": "create(address[],int256[],address[],address,string,string)",
+      "arguments": [
+        "[0x473a827b9B50b2a8A711493C9F80CFeE96f3Be97, 0x714F7a3d1A3F33fB09CE13f5033C0E576Cd0cE8e, 0x5865665E51cA79A6462a88A14179056C73F681E1]",
+        "[50000000, 1000000000000000, 25000000000000000000]",
+        "[0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5, 0x6D06248e18d2A713912CeDE4203213ce15307Ca0]",
+        "0xfeB42b6c3c4250F435c20cFF22eA2FE386A830F2",
+        "\"BTC_USDC_LINK\"",
+        "\"BUL\""
+      ],
 
 
 ### Mock token Contracts
@@ -102,7 +105,7 @@ $ cast --help
 
 #### Set valuer: [0x012d6bC94051C3b9F923c043A51D381903EAC16A](https://sepolia.etherscan.io/address/0x012d6bC94051C3b9F923c043A51D381903EAC16A)
 
-#### Price Oracle: [0x49ad1B642318202A5b20513B826918A328D8D6E4](https://sepolia.etherscan.io/address/0x012d6bC94051C3b9F923c043A51D381903EAC16A)
+#### Price Oracle: [0x49ad1B642318202A5b20513B826918A328D8D6E4](https://sepolia.etherscan.io/address/0x49ad1B642318202A5b20513B826918A328D8D6E4)
 
 ### Modules
 
@@ -114,12 +117,12 @@ $ cast --help
 
 ### Chainlink oracle adpater
 
-#### USDC-USD adpter [0xE3e0c9a4f088C754c381d161d67A596721E613aB](https://sepolia.etherscan.io/address/0xE3e0c9a4f088C754c381d161d67A596721E613aB)
+#### USDC-USD adpter [0xd9DC501B9E4437683ABfe83B377748Af7265b562.](https://sepolia.etherscan.io/address/0xd9DC501B9E4437683ABfe83B377748Af7265b562.)
 
-#### DAI-USDC adpter [0x5934DE42541C7eF4860095d37344B71042c1706C](https://sepolia.etherscan.io/address/0x5934DE42541C7eF4860095d37344B71042c1706C)
+#### DAI-USDC adpter [0xdc51ab0258B5ff93E2CEea0cf6aAD6937E346FE0](https://sepolia.etherscan.io/address/0xdc51ab0258B5ff93E2CEea0cf6aAD6937E346FE0)
 
-#### ETH-USD adpter [0x49ad1B642318202A5b20513B826918A328D8D6E4](https://sepolia.etherscan.io/address/0x5934DE42541C7eF4860095d37344B71042c1706C)
+#### ETH-USD adpter [0xeD7A35c4Ee06ea4e3203471d1b022019849F8EDA](https://sepolia.etherscan.io/address/0xeD7A35c4Ee06ea4e3203471d1b022019849F8EDA)
 
-#### BTC-USD adapter [0x295349FBB6de65686382b20189632434894Ebe42](https://sepolia.etherscan.io/address/0x295349FBB6de65686382b20189632434894Ebe42)
+#### BTC-USD adapter [0x5920257792dBba08dfadD34607B781E3C2CDb3cF](https://sepolia.etherscan.io/address/0x5920257792dbba08dfadd34607b781e3c2cdb3cf)
 
-#### LINK-USD adapter [0x0a2658f1Fb8C8b734635A49dE6209c243c42b7F0](https://sepolia.etherscan.io/address/0x0a2658f1Fb8C8b734635A49dE6209c243c42b7F0)
+#### LINK-USD adapter [0x6aE07395E64A0bEd5529e170C1A0b667E05D4Ad3](https://sepolia.etherscan.io/address/0x6aE07395E64A0bEd5529e170C1A0b667E05D4Ad3)

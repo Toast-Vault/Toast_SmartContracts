@@ -5,8 +5,6 @@ import {Script, console} from "forge-std/Script.sol";
 import {SetToken} from "@setToken/contracts/protocol/SetToken.sol";
 import {ContractAddresses} from "./helper/ContractAddresses.s.sol";
 import {Controller} from "@setToken/contracts/protocol/Controller.sol";
-import {CustomOracleNavIssuanceModule} from "@setToken/contracts/protocol/modules/v1/CustomOracleNAVIssuanceModule.sol";
-import {INAVIssuanceHook} from "@setToken/contracts/interfaces/INAVIssuanceHook.sol";
 import {ISetValuer} from "@setToken/contracts/interfaces/ISetValuer.sol";
 
 contract TokenSetConfig is Script, ContractAddresses {
@@ -24,7 +22,14 @@ contract TokenSetConfig is Script, ContractAddresses {
         setManagerTokenSet(tokenSetManager, tokenSetManagerPrivateKey);
         getControllerManager();
         getTokenSetManager();
-        isModulePending(address(usdcBtcLink), generalIndexModuleAddress);
+        setModuleStatePending(
+            customOracleNavIssuanceModuleAddress,
+            tokenSetManagerPrivateKey
+        );
+        isModulePending(
+            address(usdcBtcLink),
+            customOracleNavIssuanceModuleAddress
+        );
         getModules(address(usdcBtcLink));
     }
 
@@ -51,6 +56,14 @@ contract TokenSetConfig is Script, ContractAddresses {
         Controller controller = Controller(address(controllerAddress));
         address owner = controller.owner();
         console.log("Controller Mmanager: %s", owner);
+    }
+
+    function setModuleStatePending(address module, uint256 privateKey) public {
+        SetToken setToken = SetToken(payable(address(usdcBtcLink)));
+        vm.startBroadcast(privateKey);
+        setToken.addModule(module);
+        console.log("%s module has been init to pending state", module);
+        vm.stopBroadcast();
     }
 
     function getTokenSetManager() public view {

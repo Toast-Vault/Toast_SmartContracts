@@ -17,37 +17,34 @@ contract MintApproveMockTokens is Script {
     address constant LINK = 0x5865665E51cA79A6462a88A14179056C73F681E1;
     address constant basicIssuanceModuleAddress =
         0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5;
+    address constant customOracleNavIssuanceModuleAddress = (
+        0x392F1587db195283E247CeECe541c6a744C3E7D7
+    );
+    address constant usdcBtcLink = 0xd995E679A577C29Ad7E06d1e3d194c961930E590;
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("USER_ONE");
         address deployer = vm.addr(deployerPrivateKey);
         // Mint and approve USDC Token
-        mintMockToken(USDC, deployerPrivateKey, deployer);
-        approveModule(USDC, deployerPrivateKey);
+        mintMockToken(deployerPrivateKey, USDC, deployer);
+        approveModule(deployerPrivateKey, USDC, basicIssuanceModuleAddress);
+        approveModule(
+            deployerPrivateKey,
+            USDC,
+            customOracleNavIssuanceModuleAddress
+        );
         balanceOf(USDC, deployer);
-        // Mint and approve Dai Token
-        mintMockToken(DAI, deployerPrivateKey, deployer);
-        approveModule(DAI, deployerPrivateKey);
-        balanceOf(DAI, deployer);
-        // Mint and approve BTC Token
-        mintMockToken(WBTC, deployerPrivateKey, deployer);
-        approveModule(WBTC, deployerPrivateKey);
-        balanceOf(WBTC, deployer);
-        // Mint and approve LINK Token
-        mintMockToken(LINK, deployerPrivateKey, deployer);
-        approveModule(LINK, deployerPrivateKey);
-        balanceOf(LINK, deployer);
     }
 
     // Minting 100
     function mintMockToken(
-        address tokenAddress,
         uint256 privateKey,
+        address tokenAddress,
         address user
     ) public {
         StandardTokenMock standardTokenMock = StandardTokenMock(tokenAddress);
         string memory name = standardTokenMock.name();
-        uint256 mintToken = 100;
+        uint256 mintToken = 100000e6;
         console.log("Minting %s tokens ...", name);
         vm.startBroadcast(privateKey);
         standardTokenMock.mint(user, mintToken);
@@ -55,12 +52,16 @@ contract MintApproveMockTokens is Script {
         console.log("Finished m,inting %s tokens ...", name);
     }
 
-    function approveModule(address tokenAddress, uint256 privateKey) public {
+    function approveModule(
+        uint256 privateKey,
+        address tokenAddress,
+        address module
+    ) public {
         StandardTokenMock standardTokenMock = StandardTokenMock(tokenAddress);
         string memory name = standardTokenMock.name();
         console.log("Approving %s tokens ...", name);
         vm.startBroadcast(privateKey);
-        standardTokenMock.approve(basicIssuanceModuleAddress, UINT256_MAX);
+        standardTokenMock.approve(module, UINT256_MAX);
         vm.stopBroadcast();
         console.log("Finished approving %s tokens ...", name);
     }

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.6.10;
+pragma experimental "ABIEncoderV2";
 
 import {Script, console} from "forge-std/Script.sol";
 import {ContractAddresses} from "./helper/ContractAddresses.sol";
@@ -7,7 +8,6 @@ import {SetTokenCreator} from "@setToken/contracts/protocol/SetTokenCreator.sol"
 import {BasicIssuanceModule} from "@setToken/contracts/protocol/modules/v1/BasicIssuanceModule.sol";
 import {GeneralIndexModule} from "@setToken/contracts/protocol/modules/v1/GeneralIndexModule.sol";
 import {ISetToken} from "@setToken/contracts/interfaces/ISetToken.sol";
-import {IManagerIssuanceHook} from "@setToken/contracts/interfaces/IManagerIssuanceHook.sol";
 import {IController} from "@setToken/contracts/interfaces/IController.sol";
 
 // Utilise this script to make new tokenSet
@@ -20,9 +20,10 @@ contract DeploySetToken is Script, ContractAddresses {
     address[] components = [mockUSDC, mockWBTC, mockLINK];
     address[] modules = [
         address(basicIssuanceModuleAddress),
-        address(generalIndexModuleAddress)
+        address(generalIndexModuleAddress),
+        customOracleNavIssuanceModuleAddress
     ];
-    int256[] units = [50e6 /*50 USDC*/, 1e16 /*0.01 WBTC*/, 25e18 /*25 LINK*/];
+    int256[] units = [50e6 /*50 USDC*/, 1e15 /*0.001 WBTC*/, 15e18 /*15 LINK*/];
 
     function run() external {
         // Private has to be of the manager address mentioned above. Edit it accordingly.
@@ -83,3 +84,7 @@ contract DeploySetToken is Script, ContractAddresses {
         vm.stopBroadcast();
     }
 }
+// This is for customOracleNavIssuanceModule initialization to pending state. This is mandoratory before calling init() from module contract. This module is using struct which is not supported by older version of solidity. We can either call the function by etherscan or cast.
+// cast send 0x392F1587db195283E247CeECe541c6a744C3E7D7 "initialize(address,(address,address,address,address[],address,uint256[2],uint256,uint256,uint256,uint256))" \
+// 0xd995E679A577C29Ad7E06d1e3d194c961930E590 \
+// "(0x0000000000000000000000000000000000000000,0x0000000000000000000000000000000000000000,0x0000000000000000000000000000000000000000,[0x473a827b9B50b2a8A711493C9F80CFeE96f3Be97], 0xfeB42b6c3c4250F435c20cFF22eA2FE386A830F2,[0,0],900000000000000000,0,900000000000000000,1)"

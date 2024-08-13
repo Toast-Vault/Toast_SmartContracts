@@ -14,7 +14,7 @@ import {ISetValuer} from "@setToken/contracts/interfaces/ISetValuer.sol";
 abstract contract ContractAddresses {
     // SetToken address
     ISetToken usdcBtcLink =
-        ISetToken(0x6ecF9bBf7038c6Ca131fC73197B89993942eb5bb);
+        ISetToken(0xd995E679A577C29Ad7E06d1e3d194c961930E590);
 
     IWETH wEth = IWETH(0x295349FBB6de65686382b20189632434894Ebe42);
     address mockDAI = 0x48feC5d47182698Ec10D1c258d90dC9dB142de41;
@@ -38,7 +38,7 @@ abstract contract ContractAddresses {
         IBasicIssuanceModule(0x38Ea574B6dC8229575b195CF77CeCC3C1749E5e5);
     address generalIndexModuleAddress =
         0x6D06248e18d2A713912CeDE4203213ce15307Ca0;
-    address customOracleNavIssuanceModule = (
+    address customOracleNavIssuanceModuleAddress = (
         0x392F1587db195283E247CeECe541c6a744C3E7D7
     );
 }

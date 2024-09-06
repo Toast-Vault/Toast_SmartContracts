@@ -5,19 +5,21 @@ import {Script, console} from "forge-std/Script.sol";
 import {PriceOracle} from "@setToken/contracts/protocol/PriceOracle.sol";
 import {ContractAddresses} from "./helper/ContractAddresses.sol";
 import {IOracle} from "@setToken/contracts/interfaces/IOracle.sol";
+import {IPyth} from "@setToken/contracts/interfaces/external/IPyth.sol";
 
 contract DeployPriceOracle is Script, ContractAddresses {
     address masterQuoteAsset = usdc;
     address[] _adapters;
     address[] _assetOnes = [usdc, dai, wbtc, link];
     address[] _assetTwos = [usdc, usdc, usdc, usdc];
-    IOracle[] _oracles = [usdc_usd, dai_usdc, wbtc_usd, link_usd];
+    bytes32[] _oracles = [usdc_usd, dai_usd, btc_usd, link_usd];
 
     function run() external returns (PriceOracle) {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         PriceOracle priceOracle = new PriceOracle(
             controller,
+            pyth,
             masterQuoteAsset,
             _adapters,
             _assetOnes,

@@ -2,7 +2,8 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-remappings = ["@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/","@openzeppelin-V8/contracts/=lib/OpenZeppelin-contracts-08/contracts/", "@setToken/contracts=src/set-tokens-v2/", "@mockERC20=src/mock"]
+remappings = ["@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/","@openzeppelin-V8/contracts/=lib/OpenZeppelin-contracts-08/contracts/", "@setToken/contracts=src/set-tokens-v2/", "@mockERC20=src/mock",
+"@pythnetwork/pyth-sdk-solidity/=node_modules/@pythnetwork/pyth-sdk-solidity"]
 
 #forge install OpenZeppelin/openzeppelin-contracts@3.1.0 --no-commit
 #forge install OpenZeppelin-contracts-08=OpenZeppelin/openzeppelin-contracts --no-commit

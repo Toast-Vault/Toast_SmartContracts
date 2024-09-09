@@ -105,7 +105,7 @@ $ cast --help
 
 #### Set valuer: [0x012d6bC94051C3b9F923c043A51D381903EAC16A](https://sepolia.etherscan.io/address/0x012d6bC94051C3b9F923c043A51D381903EAC16A)
 
-#### Price Oracle: [0x49ad1B642318202A5b20513B826918A328D8D6E4](https://sepolia.etherscan.io/address/0x49ad1B642318202A5b20513B826918A328D8D6E4)
+#### Price Oracle: [0xa9d5688EDabc2b51877A1f1740da439C43231f10](https://sepolia.etherscan.io/address/0xa9d5688EDabc2b51877A1f1740da439C43231f10)
 
 ### Modules
 

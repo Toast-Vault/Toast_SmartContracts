@@ -113,5 +113,3 @@ contract NavIssuanceModuleRedeem is Script, ContractAddresses {
         return setToken.balanceOf(userAddress);
     }
 }
-//1764342507313481138
-//1.764342507313481138

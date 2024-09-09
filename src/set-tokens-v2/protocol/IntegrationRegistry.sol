@@ -32,21 +32,9 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract IntegrationRegistry is Ownable {
     /* ============ Events ============ */
 
-    event IntegrationAdded(
-        address indexed _module,
-        address indexed _adapter,
-        string _integrationName
-    );
-    event IntegrationRemoved(
-        address indexed _module,
-        address indexed _adapter,
-        string _integrationName
-    );
-    event IntegrationEdited(
-        address indexed _module,
-        address _newAdapter,
-        string _integrationName
-    );
+    event IntegrationAdded(address indexed _module, address indexed _adapter, string _integrationName);
+    event IntegrationRemoved(address indexed _module, address indexed _adapter, string _integrationName);
+    event IntegrationEdited(address indexed _module, address _newAdapter, string _integrationName);
 
     /* ============ State Variables ============ */
 
@@ -76,17 +64,10 @@ contract IntegrationRegistry is Ownable {
      * @param  _name         Human readable string identifying the integration
      * @param  _adapter      Address of the adapter contract to add
      */
-    function addIntegration(
-        address _module,
-        string memory _name,
-        address _adapter
-    ) public onlyOwner {
+    function addIntegration(address _module, string memory _name, address _adapter) public onlyOwner {
         bytes32 hashedName = _nameHash(_name);
         require(controller.isModule(_module), "Must be valid module.");
-        require(
-            integrations[_module][hashedName] == address(0),
-            "Integration exists already."
-        );
+        require(integrations[_module][hashedName] == address(0), "Integration exists already.");
         require(_adapter != address(0), "Adapter address must exist.");
 
         integrations[_module][hashedName] = _adapter;
@@ -101,23 +82,16 @@ contract IntegrationRegistry is Ownable {
      * @param  _names        Array of human readable strings identifying the integration
      * @param  _adapters     Array of addresses of the adapter contracts to add
      */
-    function batchAddIntegration(
-        address[] memory _modules,
-        string[] memory _names,
-        address[] memory _adapters
-    ) external onlyOwner {
+    function batchAddIntegration(address[] memory _modules, string[] memory _names, address[] memory _adapters)
+        external
+        onlyOwner
+    {
         // Storing modules count to local variable to save on invocation
         uint256 modulesCount = _modules.length;
 
         require(modulesCount > 0, "Modules must not be empty");
-        require(
-            modulesCount == _names.length,
-            "Module and name lengths mismatch"
-        );
-        require(
-            modulesCount == _adapters.length,
-            "Module and adapter lengths mismatch"
-        );
+        require(modulesCount == _names.length, "Module and name lengths mismatch");
+        require(modulesCount == _adapters.length, "Module and adapter lengths mismatch");
 
         for (uint256 i = 0; i < modulesCount; i++) {
             // Add integrations to the specified module. Will revert if module and name combination exists
@@ -132,18 +106,11 @@ contract IntegrationRegistry is Ownable {
      * @param  _name         Human readable string identifying the integration
      * @param  _adapter      Address of the adapter contract to edit
      */
-    function editIntegration(
-        address _module,
-        string memory _name,
-        address _adapter
-    ) public onlyOwner {
+    function editIntegration(address _module, string memory _name, address _adapter) public onlyOwner {
         bytes32 hashedName = _nameHash(_name);
 
         require(controller.isModule(_module), "Must be valid module.");
-        require(
-            integrations[_module][hashedName] != address(0),
-            "Integration does not exist."
-        );
+        require(integrations[_module][hashedName] != address(0), "Integration does not exist.");
         require(_adapter != address(0), "Adapter address must exist.");
 
         integrations[_module][hashedName] = _adapter;
@@ -159,23 +126,16 @@ contract IntegrationRegistry is Ownable {
      * @param  _names        Array of human readable strings identifying the integration
      * @param  _adapters     Array of addresses of the adapter contracts to add
      */
-    function batchEditIntegration(
-        address[] memory _modules,
-        string[] memory _names,
-        address[] memory _adapters
-    ) external onlyOwner {
+    function batchEditIntegration(address[] memory _modules, string[] memory _names, address[] memory _adapters)
+        external
+        onlyOwner
+    {
         // Storing name count to local variable to save on invocation
         uint256 modulesCount = _modules.length;
 
         require(modulesCount > 0, "Modules must not be empty");
-        require(
-            modulesCount == _names.length,
-            "Module and name lengths mismatch"
-        );
-        require(
-            modulesCount == _adapters.length,
-            "Module and adapter lengths mismatch"
-        );
+        require(modulesCount == _names.length, "Module and name lengths mismatch");
+        require(modulesCount == _adapters.length, "Module and adapter lengths mismatch");
 
         for (uint256 i = 0; i < modulesCount; i++) {
             // Edits integrations to the specified module. Will revert if module and name combination does not exist
@@ -189,15 +149,9 @@ contract IntegrationRegistry is Ownable {
      * @param  _module       The address of the module associated with the integration
      * @param  _name         Human readable string identifying the integration
      */
-    function removeIntegration(
-        address _module,
-        string memory _name
-    ) external onlyOwner {
+    function removeIntegration(address _module, string memory _name) external onlyOwner {
         bytes32 hashedName = _nameHash(_name);
-        require(
-            integrations[_module][hashedName] != address(0),
-            "Integration does not exist."
-        );
+        require(integrations[_module][hashedName] != address(0), "Integration does not exist.");
 
         address oldAdapter = integrations[_module][hashedName];
         delete integrations[_module][hashedName];
@@ -215,10 +169,7 @@ contract IntegrationRegistry is Ownable {
      *
      * @return               Address of adapter
      */
-    function getIntegrationAdapter(
-        address _module,
-        string memory _name
-    ) external view returns (address) {
+    function getIntegrationAdapter(address _module, string memory _name) external view returns (address) {
         return integrations[_module][_nameHash(_name)];
     }
 
@@ -230,10 +181,7 @@ contract IntegrationRegistry is Ownable {
      *
      * @return               Address of adapter
      */
-    function getIntegrationAdapterWithHash(
-        address _module,
-        bytes32 _nameHash
-    ) external view returns (address) {
+    function getIntegrationAdapterWithHash(address _module, bytes32 _nameHash) external view returns (address) {
         return integrations[_module][_nameHash];
     }
 
@@ -245,10 +193,7 @@ contract IntegrationRegistry is Ownable {
      *
      * @return               Boolean indicating if valid
      */
-    function isValidIntegration(
-        address _module,
-        string memory _name
-    ) external view returns (bool) {
+    function isValidIntegration(address _module, string memory _name) external view returns (bool) {
         return integrations[_module][_nameHash(_name)] != address(0);
     }
 

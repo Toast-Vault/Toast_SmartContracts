@@ -17,23 +17,18 @@
 */
 pragma solidity 0.6.10;
 
-
 /**
  * @title IAmmAdapter
  * @author Set Protocol
  */
 interface IAmmAdapter {
-
     function getProvideLiquidityCalldata(
         address _setToken,
         address _pool,
         address[] calldata _components,
         uint256[] calldata _maxTokensIn,
         uint256 _minLiquidity
-    )
-        external
-        view
-        returns (address _target, uint256 _value, bytes memory _calldata);
+    ) external view returns (address _target, uint256 _value, bytes memory _calldata);
 
     function getProvideLiquiditySingleAssetCalldata(
         address _setToken,
@@ -59,6 +54,6 @@ interface IAmmAdapter {
         uint256 _liquidity
     ) external view returns (address _target, uint256 _value, bytes memory _calldata);
 
-    function getSpenderAddress(address _pool) external view returns(address);
-    function isValidPool(address _pool, address[] memory _components) external view returns(bool);
+    function getSpenderAddress(address _pool) external view returns (address);
+    function isValidPool(address _pool, address[] memory _components) external view returns (bool);
 }

@@ -19,11 +19,11 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { ISetToken } from "./ISetToken.sol";
-import { IWETH } from "./external/IWETH.sol";
+import {ISetToken} from "./ISetToken.sol";
+import {IWETH} from "./external/IWETH.sol";
 
 interface IWrapModuleV2 {
-    function weth() external view returns(IWETH);
+    function weth() external view returns (IWETH);
 
     function initialize(ISetToken _setToken) external;
 

@@ -18,12 +18,9 @@ contract DeploySetToken is Script, ContractAddresses {
     string name = "BTC_USDC_LINK";
     string symbol = "BUL";
     address[] components = [mockUSDC, mockWBTC, mockLINK];
-    address[] modules = [
-        address(basicIssuanceModuleAddress),
-        address(generalIndexModuleAddress),
-        customOracleNavIssuanceModuleAddress
-    ];
-    int256[] units = [50e6 /*50 USDC*/, 1e15 /*0.001 WBTC*/, 15e18 /*15 LINK*/];
+    address[] modules =
+        [address(basicIssuanceModuleAddress), address(generalIndexModuleAddress), customOracleNavIssuanceModuleAddress];
+    int256[] units = [50e6, /*50 USDC*/ 1e15, /*0.001 WBTC*/ 15e18 /*15 LINK*/ ];
 
     function run() external {
         // Private has to be of the manager address mentioned above. Edit it accordingly.
@@ -39,45 +36,26 @@ contract DeploySetToken is Script, ContractAddresses {
     }
 
     function deploySetToken(uint256 privateKey) public returns (address) {
-        SetTokenCreator controller = SetTokenCreator(
-            address(setTokenCreatorAddress)
-        );
+        SetTokenCreator controller = SetTokenCreator(address(setTokenCreatorAddress));
         address setTokenAddress;
         address manager = vm.addr(privateKey);
         vm.startBroadcast(privateKey);
-        setTokenAddress = controller.create(
-            components,
-            units,
-            modules,
-            manager,
-            name,
-            symbol
-        );
+        setTokenAddress = controller.create(components, units, modules, manager, name, symbol);
         console.log("Set created: %s", setTokenAddress);
         vm.stopBroadcast();
         return setTokenAddress;
     }
 
-    function initBasicIssuanceModule(
-        uint256 privateKey,
-        ISetToken setToken
-    ) public {
-        BasicIssuanceModule basicIssuanceModule = BasicIssuanceModule(
-            address(basicIssuanceModuleAddress)
-        );
+    function initBasicIssuanceModule(uint256 privateKey, ISetToken setToken) public {
+        BasicIssuanceModule basicIssuanceModule = BasicIssuanceModule(address(basicIssuanceModuleAddress));
         vm.startBroadcast(privateKey);
         basicIssuanceModule.initialize(setToken, managerIssuanceHookAddress);
         console.log("Basic issuance module has been initialized");
         vm.stopBroadcast();
     }
 
-    function initGeneralIndexModule(
-        uint256 privateKey,
-        ISetToken setToken
-    ) public {
-        GeneralIndexModule generalIndexModule = GeneralIndexModule(
-            generalIndexModuleAddress
-        );
+    function initGeneralIndexModule(uint256 privateKey, ISetToken setToken) public {
+        GeneralIndexModule generalIndexModule = GeneralIndexModule(generalIndexModuleAddress);
         vm.startBroadcast(privateKey);
         generalIndexModule.initialize(setToken);
         console.log("General Index module has been initialized");

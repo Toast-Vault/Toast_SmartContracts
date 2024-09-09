@@ -28,9 +28,7 @@ contract MintSetTokens is Script, ContractAddresses {
 
     // Utilizing BasicIssuance module for minting tokenSet.
     function mintTokenSet(uint256 privateKey, address to) public {
-        BasicIssuanceModule basicIssuanceModule = BasicIssuanceModule(
-            address(basicIssuanceModuleAddress)
-        );
+        BasicIssuanceModule basicIssuanceModule = BasicIssuanceModule(address(basicIssuanceModuleAddress));
         console.log("Minting token set to %s", to);
         vm.startBroadcast(privateKey);
         basicIssuanceModule.issue(usdcBtcLink, mintToken, to);
@@ -52,10 +50,7 @@ contract MintSetTokens is Script, ContractAddresses {
 
     function getSetTokenPrice() public view {
         SetValuer setValuer = SetValuer(address(setValuerAddress));
-        uint256 price = setValuer.calculateSetTokenValuation(
-            usdcBtcLink,
-            address(wEth)
-        );
+        uint256 price = setValuer.calculateSetTokenValuation(usdcBtcLink, address(wEth));
         console.log("SetToken price in ETH: %s", price);
 
         price = setValuer.calculateSetTokenValuation(usdcBtcLink, mockWBTC);

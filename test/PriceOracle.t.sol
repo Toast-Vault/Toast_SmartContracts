@@ -36,6 +36,6 @@ contract PriceOracleTest is Test, ContractAddresses {
     function testWethUsdcPrice() public view checkFork {
         uint256 oraclePrice = priceOracle.getPrice(weth, usdc);
         PythStructs.Price memory priceStruct = pyth.getPriceUnsafe(eth_usd);
-        assertEq(oraclePrice, uint(priceStruct.price) * multiplier);
+        assertEq(oraclePrice, uint256(priceStruct.price) * multiplier);
     }
 }

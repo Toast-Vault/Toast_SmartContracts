@@ -19,14 +19,13 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import { IController } from "../../../interfaces/IController.sol";
-import { IGovernanceAdapter } from "../../../interfaces/IGovernanceAdapter.sol";
-import { Invoke } from "../../lib/Invoke.sol";
-import { ISetToken } from "../../../interfaces/ISetToken.sol";
-import { ModuleBase } from "../../lib/ModuleBase.sol";
-
+import {IController} from "../../../interfaces/IController.sol";
+import {IGovernanceAdapter} from "../../../interfaces/IGovernanceAdapter.sol";
+import {Invoke} from "../../lib/Invoke.sol";
+import {ISetToken} from "../../../interfaces/ISetToken.sol";
+import {ModuleBase} from "../../lib/ModuleBase.sol";
 
 /**
  * @title GovernanceModule
@@ -46,27 +45,15 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
         bool _support
     );
 
-    event VoteDelegated(
-        ISetToken indexed _setToken,
-        IGovernanceAdapter indexed _governanceAdapter,
-        address _delegatee
-    );
+    event VoteDelegated(ISetToken indexed _setToken, IGovernanceAdapter indexed _governanceAdapter, address _delegatee);
 
     event ProposalCreated(
-        ISetToken indexed _setToken,
-        IGovernanceAdapter indexed _governanceAdapter,
-        bytes _proposalData
+        ISetToken indexed _setToken, IGovernanceAdapter indexed _governanceAdapter, bytes _proposalData
     );
 
-    event RegistrationSubmitted(
-        ISetToken indexed _setToken,
-        IGovernanceAdapter indexed _governanceAdapter
-    );
+    event RegistrationSubmitted(ISetToken indexed _setToken, IGovernanceAdapter indexed _governanceAdapter);
 
-    event RegistrationRevoked(
-        ISetToken indexed _setToken,
-        IGovernanceAdapter indexed _governanceAdapter
-    );
+    event RegistrationRevoked(ISetToken indexed _setToken, IGovernanceAdapter indexed _governanceAdapter);
 
     /* ============ Constructor ============ */
 
@@ -82,22 +69,15 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
      * @param _governanceName           Human readable name of integration (e.g. COMPOUND) stored in the IntegrationRegistry
      * @param _delegatee                Address of delegatee
      */
-    function delegate(
-        ISetToken _setToken,
-        string memory _governanceName,
-        address _delegatee
-    )
+    function delegate(ISetToken _setToken, string memory _governanceName, address _delegatee)
         external
         nonReentrant
         onlyManagerAndValidSet(_setToken)
     {
         IGovernanceAdapter governanceAdapter = IGovernanceAdapter(getAndValidateAdapter(_governanceName));
 
-        (
-            address targetExchange,
-            uint256 callValue,
-            bytes memory methodData
-        ) = governanceAdapter.getDelegateCalldata(_delegatee);
+        (address targetExchange, uint256 callValue, bytes memory methodData) =
+            governanceAdapter.getDelegateCalldata(_delegatee);
 
         _setToken.invoke(targetExchange, callValue, methodData);
 
@@ -111,22 +91,15 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
      * @param _governanceName           Human readable name of integration (e.g. COMPOUND) stored in the IntegrationRegistry
      * @param _proposalData             Byte data of proposal to pass into governance adapter
      */
-    function propose(
-        ISetToken _setToken,
-        string memory _governanceName,
-        bytes memory _proposalData
-    )
+    function propose(ISetToken _setToken, string memory _governanceName, bytes memory _proposalData)
         external
         nonReentrant
         onlyManagerAndValidSet(_setToken)
     {
         IGovernanceAdapter governanceAdapter = IGovernanceAdapter(getAndValidateAdapter(_governanceName));
 
-        (
-            address targetExchange,
-            uint256 callValue,
-            bytes memory methodData
-        ) = governanceAdapter.getProposeCalldata(_proposalData);
+        (address targetExchange, uint256 callValue, bytes memory methodData) =
+            governanceAdapter.getProposeCalldata(_proposalData);
 
         _setToken.invoke(targetExchange, callValue, methodData);
 
@@ -139,21 +112,15 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
      * @param _setToken                 Address of SetToken
      * @param _governanceName           Human readable name of integration (e.g. COMPOUND) stored in the IntegrationRegistry
      */
-    function register(
-        ISetToken _setToken,
-        string memory _governanceName
-    )
+    function register(ISetToken _setToken, string memory _governanceName)
         external
         nonReentrant
         onlyManagerAndValidSet(_setToken)
     {
         IGovernanceAdapter governanceAdapter = IGovernanceAdapter(getAndValidateAdapter(_governanceName));
 
-        (
-            address targetExchange,
-            uint256 callValue,
-            bytes memory methodData
-        ) = governanceAdapter.getRegisterCalldata(address(_setToken));
+        (address targetExchange, uint256 callValue, bytes memory methodData) =
+            governanceAdapter.getRegisterCalldata(address(_setToken));
 
         _setToken.invoke(targetExchange, callValue, methodData);
 
@@ -166,21 +133,14 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
      * @param _setToken                 Address of SetToken
      * @param _governanceName           Human readable name of integration (e.g. COMPOUND) stored in the IntegrationRegistry
      */
-    function revoke(
-        ISetToken _setToken,
-        string memory _governanceName
-    )
+    function revoke(ISetToken _setToken, string memory _governanceName)
         external
         nonReentrant
         onlyManagerAndValidSet(_setToken)
     {
         IGovernanceAdapter governanceAdapter = IGovernanceAdapter(getAndValidateAdapter(_governanceName));
 
-        (
-            address targetExchange,
-            uint256 callValue,
-            bytes memory methodData
-        ) = governanceAdapter.getRevokeCalldata();
+        (address targetExchange, uint256 callValue, bytes memory methodData) = governanceAdapter.getRevokeCalldata();
 
         _setToken.invoke(targetExchange, callValue, methodData);
 
@@ -203,22 +163,11 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
         uint256 _proposalId,
         bool _support,
         bytes memory _data
-    )
-        external
-        nonReentrant
-        onlyManagerAndValidSet(_setToken)
-    {
+    ) external nonReentrant onlyManagerAndValidSet(_setToken) {
         IGovernanceAdapter governanceAdapter = IGovernanceAdapter(getAndValidateAdapter(_governanceName));
 
-        (
-            address targetExchange,
-            uint256 callValue,
-            bytes memory methodData
-        ) = governanceAdapter.getVoteCalldata(
-            _proposalId,
-            _support,
-            _data
-        );
+        (address targetExchange, uint256 callValue, bytes memory methodData) =
+            governanceAdapter.getVoteCalldata(_proposalId, _support, _data);
 
         _setToken.invoke(targetExchange, callValue, methodData);
 
@@ -230,7 +179,11 @@ contract GovernanceModule is ModuleBase, ReentrancyGuard {
      *
      * @param _setToken             Instance of the SetToken to issue
      */
-    function initialize(ISetToken _setToken) external onlySetManager(_setToken, msg.sender) onlyValidAndPendingSet(_setToken) {
+    function initialize(ISetToken _setToken)
+        external
+        onlySetManager(_setToken, msg.sender)
+        onlyValidAndPendingSet(_setToken)
+    {
         _setToken.initializeModule();
     }
 

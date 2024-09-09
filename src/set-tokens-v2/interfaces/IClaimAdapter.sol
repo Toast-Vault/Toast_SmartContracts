@@ -16,9 +16,9 @@
     SPDX-License-Identifier: Apache License, Version 2.0
 */
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import { ISetToken } from "../interfaces/ISetToken.sol";
+import {ISetToken} from "../interfaces/ISetToken.sol";
 
 pragma solidity 0.6.10;
 
@@ -28,21 +28,20 @@ pragma solidity 0.6.10;
  *
  */
 interface IClaimAdapter {
-
     /**
      * Generates the calldata for claiming tokens from the rewars pool
      *
      * @param _setToken     the set token that is owed the tokens
-     * @param _rewardPool   the rewards pool to claim from  
+     * @param _rewardPool   the rewards pool to claim from
      *
      * @return _subject     the rewards pool to call
      * @return _value       the amount of ether to send in the call
      * @return _calldata    the calldata to use
      */
-    function getClaimCallData(
-        ISetToken _setToken,
-        address _rewardPool
-    ) external view returns(address _subject, uint256 _value, bytes memory _calldata);
+    function getClaimCallData(ISetToken _setToken, address _rewardPool)
+        external
+        view
+        returns (address _subject, uint256 _value, bytes memory _calldata);
 
     /**
      * Gets the amount of unclaimed rewards
@@ -52,7 +51,7 @@ interface IClaimAdapter {
      *
      * @return uint256      the amount of unclaimed rewards
      */
-    function getRewardsAmount(ISetToken _setToken, address _rewardPool) external view returns(uint256);
+    function getRewardsAmount(ISetToken _setToken, address _rewardPool) external view returns (uint256);
 
     /**
      * Gets the rewards token
@@ -61,5 +60,5 @@ interface IClaimAdapter {
      *
      * @return IERC20       the reward token
      */
-    function getTokenAddress(address _rewardPool) external view returns(IERC20);
+    function getTokenAddress(address _rewardPool) external view returns (IERC20);
 }

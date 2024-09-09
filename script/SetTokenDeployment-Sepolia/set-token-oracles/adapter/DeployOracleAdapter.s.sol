@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.6.10;
+
 import {Script, console} from "forge-std/Script.sol";
 import {ChainlinkOracleAdapter} from "@setToken/contracts/adapter/ChainlinkOracleAdapter.sol";
 import {ContractAddresses} from "./helper/ContractAddresses.sol";
@@ -23,17 +24,11 @@ contract DeployOracleAdapter is Script, ContractAddresses {
         console.log("LINK-USD adapter %s", address(chainlinkLINKAdapter));
     }
 
-    function deployChainlinkOracleAdapter(
-        AggregatorInterface oracle
-    ) public returns (address) {
+    function deployChainlinkOracleAdapter(AggregatorInterface oracle) public returns (address) {
         // Private has to be of the manager address mentioned above. Edit it accordingly.
-        uint256 deployerPrivateKey = vm.envUint(
-            "SET_TOKEN_MANAGER_PRIVATE_KEY"
-        );
+        uint256 deployerPrivateKey = vm.envUint("SET_TOKEN_MANAGER_PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        ChainlinkOracleAdapter chainlinkAdapter = new ChainlinkOracleAdapter(
-            oracle
-        );
+        ChainlinkOracleAdapter chainlinkAdapter = new ChainlinkOracleAdapter(oracle);
         vm.stopBroadcast();
         return address(chainlinkAdapter);
     }

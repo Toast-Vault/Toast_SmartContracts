@@ -15,18 +15,18 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import { SafeCast } from "@openzeppelin/contracts/utils/SafeCast.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
 
-import { IController } from "../../../interfaces/IController.sol";
-import { IManagerIssuanceHook } from "../../../interfaces/IManagerIssuanceHook.sol";
-import { Invoke } from "../../lib/Invoke.sol";
-import { ISetToken } from "../../../interfaces/ISetToken.sol";
-import { ModuleBase } from "../../lib/ModuleBase.sol";
-import { Position } from "../../lib/Position.sol";
-import { PreciseUnitMath } from "../../../lib/PreciseUnitMath.sol";
+import {IController} from "../../../interfaces/IController.sol";
+import {IManagerIssuanceHook} from "../../../interfaces/IManagerIssuanceHook.sol";
+import {Invoke} from "../../lib/Invoke.sol";
+import {ISetToken} from "../../../interfaces/ISetToken.sol";
+import {ModuleBase} from "../../lib/ModuleBase.sol";
+import {Position} from "../../lib/Position.sol";
+import {PreciseUnitMath} from "../../../lib/PreciseUnitMath.sol";
 
 /**
  * @title BasicIssuanceModule
@@ -53,10 +53,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
         uint256 _quantity
     );
     event SetTokenRedeemed(
-        address indexed _setToken,
-        address indexed _redeemer,
-        address indexed _to,
-        uint256 _quantity
+        address indexed _setToken, address indexed _redeemer, address indexed _to, uint256 _quantity
     );
 
     /* ============ State Variables ============ */
@@ -83,11 +80,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
      * @param _quantity             Quantity of the SetToken to mint
      * @param _to                   Address to mint SetToken to
      */
-    function issue(
-        ISetToken _setToken,
-        uint256 _quantity,
-        address _to
-    )
+    function issue(ISetToken _setToken, uint256 _quantity, address _to)
         external
         nonReentrant
         onlyValidAndInitializedSet(_setToken)
@@ -95,19 +88,12 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
         require(_quantity > 0, "Issue quantity must be > 0");
 
         address hookContract = _callPreIssueHooks(_setToken, _quantity, msg.sender, _to);
-        (
-            address[] memory components,
-            uint256[] memory componentQuantities
-        ) = getRequiredComponentUnitsForIssue(_setToken, _quantity);
+        (address[] memory components, uint256[] memory componentQuantities) =
+            getRequiredComponentUnitsForIssue(_setToken, _quantity);
         // For each position, transfer the required underlying to the SetToken
         for (uint256 i = 0; i < components.length; i++) {
             // Transfer the component to the SetToken
-            transferFrom(
-                IERC20(components[i]),
-                msg.sender,
-                address(_setToken),
-                componentQuantities[i]
-            );
+            transferFrom(IERC20(components[i]), msg.sender, address(_setToken), componentQuantities[i]);
         }
 
         // Mint the SetToken
@@ -123,11 +109,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
      * @param _quantity             Quantity of the SetToken to redeem
      * @param _to                   Address to send component assets to
      */
-    function redeem(
-        ISetToken _setToken,
-        uint256 _quantity,
-        address _to
-    )
+    function redeem(ISetToken _setToken, uint256 _quantity, address _to)
         external
         nonReentrant
         onlyValidAndInitializedSet(_setToken)
@@ -149,11 +131,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
             uint256 componentQuantity = _quantity.preciseMul(unit);
 
             // Instruct the SetToken to transfer the component to the user
-            _setToken.strictInvokeTransfer(
-                component,
-                _to,
-                componentQuantity
-            );
+            _setToken.strictInvokeTransfer(component, _to, componentQuantity);
         }
 
         emit SetTokenRedeemed(address(_setToken), msg.sender, _to, _quantity);
@@ -166,10 +144,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
      * @param _setToken             Instance of the SetToken to issue
      * @param _preIssueHook         Instance of the Manager Contract with the Pre-Issuance Hook function
      */
-    function initialize(
-        ISetToken _setToken,
-        IManagerIssuanceHook _preIssueHook
-    )
+    function initialize(ISetToken _setToken, IManagerIssuanceHook _preIssueHook)
         external
         onlySetManager(_setToken, msg.sender)
         onlyValidAndPendingSet(_setToken)
@@ -197,10 +172,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
      * @return address[]            List of component addresses
      * @return uint256[]            List of component units required to issue the quantity of SetTokens
      */
-    function getRequiredComponentUnitsForIssue(
-        ISetToken _setToken,
-        uint256 _quantity
-    )
+    function getRequiredComponentUnitsForIssue(ISetToken _setToken, uint256 _quantity)
         public
         view
         onlyValidAndInitializedSet(_setToken)
@@ -225,14 +197,9 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
      * If a pre-issue hook has been configured, call the external-protocol contract. Pre-issue hook logic
      * can contain arbitrary logic including validations, external function calls, etc.
      */
-    function _callPreIssueHooks(
-        ISetToken _setToken,
-        uint256 _quantity,
-        address _caller,
-        address _to
-    )
+    function _callPreIssueHooks(ISetToken _setToken, uint256 _quantity, address _caller, address _to)
         internal
-        returns(address)
+        returns (address)
     {
         IManagerIssuanceHook preIssueHook = managerIssuanceHook[_setToken];
         if (address(preIssueHook) != address(0)) {

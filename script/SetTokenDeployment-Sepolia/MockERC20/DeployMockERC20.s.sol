@@ -46,22 +46,10 @@ contract DeployMockErc20 is Script {
         }
     }
 
-    function deployMockToken(
-        string memory name,
-        string memory symbol,
-        uint8 decimals
-    ) public returns (address) {
-        uint256 deployerPrivateKey = vm.envUint(
-            "SET_TOKEN_MANAGER_PRIVATE_KEY"
-        );
+    function deployMockToken(string memory name, string memory symbol, uint8 decimals) public returns (address) {
+        uint256 deployerPrivateKey = vm.envUint("SET_TOKEN_MANAGER_PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        StandardTokenMock mockToken = new StandardTokenMock(
-            initialAccount,
-            initialBalance,
-            name,
-            symbol,
-            decimals
-        );
+        StandardTokenMock mockToken = new StandardTokenMock(initialAccount, initialBalance, name, symbol, decimals);
         vm.stopBroadcast();
         return address(mockToken);
     }

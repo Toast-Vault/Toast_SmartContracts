@@ -19,7 +19,7 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { ISetToken } from "./ISetToken.sol";
+import {ISetToken} from "./ISetToken.sol";
 
 interface IClaimModule {
     function initialize(
@@ -29,18 +29,25 @@ interface IClaimModule {
         string[] calldata _integrationNames
     ) external;
 
-    function anyoneClaim(ISetToken _setToken) external view returns(bool);
+    function anyoneClaim(ISetToken _setToken) external view returns (bool);
     function claim(ISetToken _setToken, address _rewardPool, string calldata _integrationName) external;
-    function batchClaim(ISetToken _setToken, address[] calldata _rewardPools, string[] calldata _integrationNames) external;
+    function batchClaim(ISetToken _setToken, address[] calldata _rewardPools, string[] calldata _integrationNames)
+        external;
     function updateAnyoneClaim(ISetToken _setToken, bool _anyoneClaim) external;
     function addClaim(ISetToken _setToken, address _rewardPool, string calldata _integrationName) external;
-    function batchAddClaim(ISetToken _setToken, address[] calldata _rewardPools, string[] calldata _integrationNames) external;
+    function batchAddClaim(ISetToken _setToken, address[] calldata _rewardPools, string[] calldata _integrationNames)
+        external;
     function removeClaim(ISetToken _setToken, address _rewardPool, string calldata _integrationName) external;
-    function batchRemoveClaim(ISetToken _setToken, address[] calldata _rewardPools, string[] calldata _integrationNames) external;
+    function batchRemoveClaim(ISetToken _setToken, address[] calldata _rewardPools, string[] calldata _integrationNames)
+        external;
     function removeModule() external;
-    function getRewardPools(ISetToken _setToken) external returns(address[] memory);
-    function isRewardPool(ISetToken _setToken, address _rewardPool) external returns(bool);
-    function getRewardPoolClaims(ISetToken _setToken, address _rewardPool) external returns(address[] memory);
-    function isRewardPoolClaim(ISetToken _setToken, address _rewardPool, string calldata _integrationName) external returns (bool);
-    function getRewards(ISetToken _setToken, address _rewardPool, string calldata _integrationName) external returns (uint256);
+    function getRewardPools(ISetToken _setToken) external returns (address[] memory);
+    function isRewardPool(ISetToken _setToken, address _rewardPool) external returns (bool);
+    function getRewardPoolClaims(ISetToken _setToken, address _rewardPool) external returns (address[] memory);
+    function isRewardPoolClaim(ISetToken _setToken, address _rewardPool, string calldata _integrationName)
+        external
+        returns (bool);
+    function getRewards(ISetToken _setToken, address _rewardPool, string calldata _integrationName)
+        external
+        returns (uint256);
 }

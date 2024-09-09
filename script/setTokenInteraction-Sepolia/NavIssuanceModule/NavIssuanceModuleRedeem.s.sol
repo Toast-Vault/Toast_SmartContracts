@@ -12,7 +12,6 @@ import {ContractAddresses} from "../helper/ContractAddresses.s.sol";
  * This script will redeem tokenSet to reserve - USER_ONE private key
  * @notice forge script script/setTokenInteraction-Sepolia/NavIssuanceModule/NavIssuanceModuleRedeem.s.sol --rpc-url $SEPOLIA_URL --broadcast
  */
-
 contract NavIssuanceModuleRedeem is Script, ContractAddresses {
     uint256 setTokenQunatity = 1e17;
 
@@ -30,13 +29,7 @@ contract NavIssuanceModuleRedeem is Script, ContractAddresses {
         unit = getDefaultPositionRealUnit(usdcBtcLink, mockLINK);
         console.log("Real unit LINK: %s", unit / 1e18);
         // Redeem token set to reserve asset
-        redeemTokenSet(
-            deployerPrivateKey,
-            usdcBtcLink,
-            mockUSDC,
-            setTokenQunatity,
-            deployer
-        );
+        redeemTokenSet(deployerPrivateKey, usdcBtcLink, mockUSDC, setTokenQunatity, deployer);
 
         balance = balanceOf(usdcBtcLink, deployer);
         console.log("Balance after minting: %s", balance);
@@ -51,64 +44,40 @@ contract NavIssuanceModuleRedeem is Script, ContractAddresses {
         uint256 setTokenQuantity,
         address to
     ) public {
-        CustomOracleNavIssuanceModule customOracleNavIssuanceModule = CustomOracleNavIssuanceModule(
-                payable(customOracleNavIssuanceModuleAddress)
-            );
-        uint256 minAmount = getMinReserveAssetReceiveQuantity(
-            setToken,
-            reserveAsset,
-            setTokenQuantity
-        );
+        CustomOracleNavIssuanceModule customOracleNavIssuanceModule =
+            CustomOracleNavIssuanceModule(payable(customOracleNavIssuanceModuleAddress));
+        uint256 minAmount = getMinReserveAssetReceiveQuantity(setToken, reserveAsset, setTokenQuantity);
         vm.startBroadcast(privateKey);
-        customOracleNavIssuanceModule.redeem(
-            setToken,
-            reserveAsset,
-            setTokenQuantity,
-            minAmount,
-            to
-        );
+        customOracleNavIssuanceModule.redeem(setToken, reserveAsset, setTokenQuantity, minAmount, to);
         vm.stopBroadcast();
     }
 
-    function getMinReserveAssetReceiveQuantity(
-        ISetToken setToken,
-        address reserveAsset,
-        uint256 setTokenQuantity
-    ) public view returns (uint256 minAmount) {
-        CustomOracleNavIssuanceModule customOracleNavIssuanceModule = CustomOracleNavIssuanceModule(
-                payable(customOracleNavIssuanceModuleAddress)
-            );
+    function getMinReserveAssetReceiveQuantity(ISetToken setToken, address reserveAsset, uint256 setTokenQuantity)
+        public
+        view
+        returns (uint256 minAmount)
+    {
+        CustomOracleNavIssuanceModule customOracleNavIssuanceModule =
+            CustomOracleNavIssuanceModule(payable(customOracleNavIssuanceModuleAddress));
 
-        minAmount = customOracleNavIssuanceModule
-            .getExpectedReserveRedeemQuantity(
-                setToken,
-                reserveAsset,
-                setTokenQuantity
-            );
+        minAmount =
+            customOracleNavIssuanceModule.getExpectedReserveRedeemQuantity(setToken, reserveAsset, setTokenQuantity);
         console.log("Min amount: %s", minAmount);
         return minAmount;
     }
 
-    function getDefaultPositionRealUnit(
-        ISetToken setTokenAddress,
-        address token
-    ) public view returns (uint256) {
+    function getDefaultPositionRealUnit(ISetToken setTokenAddress, address token) public view returns (uint256) {
         SetToken setToken = SetToken(payable(address(setTokenAddress)));
         uint256 unit = uint256(setToken.getDefaultPositionRealUnit(token));
         return unit;
     }
 
-    function totalSupply(
-        ISetToken setTokenAddress
-    ) public view returns (uint256) {
+    function totalSupply(ISetToken setTokenAddress) public view returns (uint256) {
         SetToken setToken = SetToken(payable(address(setTokenAddress)));
         return setToken.totalSupply();
     }
 
-    function balanceOf(
-        ISetToken setTokenAddress,
-        address userAddress
-    ) public view returns (uint256) {
+    function balanceOf(ISetToken setTokenAddress, address userAddress) public view returns (uint256) {
         SetToken setToken = SetToken(payable(address(setTokenAddress)));
         return setToken.balanceOf(userAddress);
     }

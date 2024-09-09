@@ -24,22 +24,15 @@ pragma solidity 0.6.10;
  *
  */
 interface IStakingAdapter {
+    function getSpenderAddress(address _stakingContract) external view returns (address);
 
-    function getSpenderAddress(address _stakingContract) external view returns(address);
-
-    function getStakeCallData(
-        address _stakingContract,
-        uint256 _notionalAmount
-    )
+    function getStakeCallData(address _stakingContract, uint256 _notionalAmount)
         external
-        view 
-        returns(address, uint256, bytes memory);
+        view
+        returns (address, uint256, bytes memory);
 
-    function getUnstakeCallData(
-        address _stakingContract,
-        uint256 _notionalAmount
-    )
+    function getUnstakeCallData(address _stakingContract, uint256 _notionalAmount)
         external
-        view 
-        returns(address, uint256, bytes memory);
+        view
+        returns (address, uint256, bytes memory);
 }

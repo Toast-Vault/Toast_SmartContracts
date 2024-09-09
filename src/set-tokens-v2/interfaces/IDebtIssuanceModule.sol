@@ -17,7 +17,7 @@
 */
 pragma solidity 0.6.10;
 
-import { ISetToken } from "./ISetToken.sol";
+import {ISetToken} from "./ISetToken.sol";
 
 /**
  * @title IDebtIssuanceModule
@@ -26,7 +26,6 @@ import { ISetToken } from "./ISetToken.sol";
  * Interface for interacting with Debt Issuance module interface.
  */
 interface IDebtIssuanceModule {
-
     /**
      * Called by another module to register itself on debt issuance module. Any logic can be included
      * in case checks need to be made or state needs to be updated.

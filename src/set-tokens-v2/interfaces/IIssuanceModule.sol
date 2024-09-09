@@ -17,7 +17,7 @@
 */
 pragma solidity 0.6.10;
 
-import { ISetToken } from "./ISetToken.sol";
+import {ISetToken} from "./ISetToken.sol";
 
 /**
  * @title IIssuanceModule

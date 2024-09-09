@@ -34,12 +34,7 @@ contract SetTokenCreator {
 
     /* ============ Events ============ */
 
-    event SetTokenCreated(
-        address indexed _setToken,
-        address _manager,
-        string _name,
-        string _symbol
-    );
+    event SetTokenCreated(address indexed _setToken, address _manager, string _name, string _symbol);
 
     /* ============ State Variables ============ */
 
@@ -76,22 +71,13 @@ contract SetTokenCreator {
         string memory _symbol
     ) external returns (address) {
         require(_components.length > 0, "Must have at least 1 component");
-        require(
-            _components.length == _units.length,
-            "Component and unit lengths must be the same"
-        );
-        require(
-            !_components.hasDuplicate(),
-            "Components must not have a duplicate"
-        );
+        require(_components.length == _units.length, "Component and unit lengths must be the same");
+        require(!_components.hasDuplicate(), "Components must not have a duplicate");
         require(_modules.length > 0, "Must have at least 1 module");
         require(_manager != address(0), "Manager must not be empty");
 
         for (uint256 i = 0; i < _components.length; i++) {
-            require(
-                _components[i] != address(0),
-                "Component must not be null address"
-            );
+            require(_components[i] != address(0), "Component must not be null address");
             require(_units[i] > 0, "Units must be greater than 0");
         }
 
@@ -100,15 +86,7 @@ contract SetTokenCreator {
         }
 
         // Creates a new SetToken instance
-        SetToken setToken = new SetToken(
-            _components,
-            _units,
-            _modules,
-            controller,
-            _manager,
-            _name,
-            _symbol
-        );
+        SetToken setToken = new SetToken(_components, _units, _modules, controller, _manager, _name, _symbol);
 
         // Registers Set with controller
         controller.addSet(address(setToken));

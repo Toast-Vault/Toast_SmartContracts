@@ -19,14 +19,13 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeCast } from "@openzeppelin/contracts/utils/SafeCast.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
-import { SignedSafeMath } from "@openzeppelin/contracts/math/SignedSafeMath.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SignedSafeMath} from "@openzeppelin/contracts/math/SignedSafeMath.sol";
 
-import { ISetToken } from "../../interfaces/ISetToken.sol";
-import { PreciseUnitMath } from "../../lib/PreciseUnitMath.sol";
-
+import {ISetToken} from "../../interfaces/ISetToken.sol";
+import {PreciseUnitMath} from "../../lib/PreciseUnitMath.sol";
 
 /**
  * @title PositionV2
@@ -52,38 +51,37 @@ library PositionV2 {
     /**
      * Returns whether the SetToken has a default position for a given component (if the real unit is > 0)
      */
-    function hasDefaultPosition(ISetToken _setToken, address _component) public view returns(bool) {
+    function hasDefaultPosition(ISetToken _setToken, address _component) public view returns (bool) {
         return _setToken.getDefaultPositionRealUnit(_component) > 0;
     }
 
     /**
      * Returns whether the SetToken has an external position for a given component (if # of position modules is > 0)
      */
-    function hasExternalPosition(ISetToken _setToken, address _component) public view returns(bool) {
+    function hasExternalPosition(ISetToken _setToken, address _component) public view returns (bool) {
         return _setToken.getExternalPositionModules(_component).length > 0;
     }
 
     /**
      * Returns whether the SetToken component default position real unit is greater than or equal to units passed in.
      */
-    function hasSufficientDefaultUnits(ISetToken _setToken, address _component, uint256 _unit) external view returns(bool) {
+    function hasSufficientDefaultUnits(ISetToken _setToken, address _component, uint256 _unit)
+        external
+        view
+        returns (bool)
+    {
         return _setToken.getDefaultPositionRealUnit(_component) >= _unit.toInt256();
     }
 
     /**
      * Returns whether the SetToken component's external position is greater than or equal to the real units passed in.
      */
-    function hasSufficientExternalUnits(
-        ISetToken _setToken,
-        address _component,
-        address _positionModule,
-        uint256 _unit
-    )
+    function hasSufficientExternalUnits(ISetToken _setToken, address _component, address _positionModule, uint256 _unit)
         external
         view
-        returns(bool)
+        returns (bool)
     {
-       return _setToken.getExternalPositionRealUnit(_component, _positionModule) >= _unit.toInt256();
+        return _setToken.getExternalPositionRealUnit(_component, _positionModule) >= _unit.toInt256();
     }
 
     /**
@@ -134,9 +132,7 @@ library PositionV2 {
         address _module,
         int256 _newUnit,
         bytes memory _data
-    )
-        external
-    {
+    ) external {
         if (_newUnit != 0) {
             if (!_setToken.isComponent(_component)) {
                 _setToken.addComponent(_component);
@@ -190,7 +186,7 @@ library PositionV2 {
      * @param _component          Address of the component
      * @return                    Notional tracked balance
      */
-    function getDefaultTrackedBalance(ISetToken _setToken, address _component) external view returns(uint256) {
+    function getDefaultTrackedBalance(ISetToken _setToken, address _component) external view returns (uint256) {
         int256 positionUnit = _setToken.getDefaultPositionRealUnit(_component);
         return _setToken.totalSupply().preciseMul(positionUnit.toUint256());
     }
@@ -211,20 +207,14 @@ library PositionV2 {
         address _component,
         uint256 _setTotalSupply,
         uint256 _componentPreviousBalance
-    )
-        external
-        returns(uint256, uint256, uint256)
-    {
+    ) external returns (uint256, uint256, uint256) {
         uint256 currentBalance = IERC20(_component).balanceOf(address(_setToken));
         uint256 positionUnit = _setToken.getDefaultPositionRealUnit(_component).toUint256();
 
         uint256 newTokenUnit;
         if (currentBalance > 0) {
             newTokenUnit = calculateDefaultEditPositionUnit(
-                _setTotalSupply,
-                _componentPreviousBalance,
-                currentBalance,
-                positionUnit
+                _setTotalSupply, _componentPreviousBalance, currentBalance, positionUnit
             );
         } else {
             newTokenUnit = 0;
@@ -250,11 +240,7 @@ library PositionV2 {
         uint256 _preTotalNotional,
         uint256 _postTotalNotional,
         uint256 _prePositionUnit
-    )
-        public
-        pure
-        returns (uint256)
-    {
+    ) public pure returns (uint256) {
         // If pre action total notional amount is greater then subtract post action total notional and calculate new position units
         uint256 airdroppedAmount = _preTotalNotional.sub(_prePositionUnit.preciseMul(_setTokenSupply));
         return _postTotalNotional.sub(airdroppedAmount).preciseDiv(_setTokenSupply);

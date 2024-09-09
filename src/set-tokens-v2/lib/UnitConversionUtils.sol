@@ -18,8 +18,8 @@
 
 pragma solidity 0.6.10;
 
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
-import { SignedSafeMath } from "@openzeppelin/contracts/math/SignedSafeMath.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SignedSafeMath} from "@openzeppelin/contracts/math/SignedSafeMath.sol";
 
 /**
  * @title UnitConversionUtils
@@ -41,7 +41,7 @@ library UnitConversionUtils {
      * @return              Input converted to alternative decimal precision format
      */
     function fromPreciseUnitToDecimals(uint256 _amount, uint8 _decimals) internal pure returns (uint256) {
-        return _amount.div(10**(18 - uint(_decimals)));
+        return _amount.div(10 ** (18 - uint256(_decimals)));
     }
 
     /**
@@ -54,7 +54,7 @@ library UnitConversionUtils {
      * @return              Input converted to alternative decimal precision format
      */
     function fromPreciseUnitToDecimals(int256 _amount, uint8 _decimals) internal pure returns (int256) {
-        return _amount.div(int256(10**(18 - uint(_decimals))));
+        return _amount.div(int256(10 ** (18 - uint256(_decimals))));
     }
 
     /**
@@ -65,7 +65,7 @@ library UnitConversionUtils {
      * @return              Input converted to int256 PRECISE_UNIT decimal format
      */
     function toPreciseUnitsFromDecimals(int256 _amount, uint8 _decimals) internal pure returns (int256) {
-        return _amount.mul(int256(10**(18 - (uint(_decimals)))));
+        return _amount.mul(int256(10 ** (18 - (uint256(_decimals)))));
     }
 
     /**
@@ -76,6 +76,6 @@ library UnitConversionUtils {
      * @return              Input converted to uint256 PRECISE_UNIT decimal format
      */
     function toPreciseUnitsFromDecimals(uint256 _amount, uint8 _decimals) internal pure returns (uint256) {
-        return _amount.mul(10**(18 - (uint(_decimals))));
+        return _amount.mul(10 ** (18 - (uint256(_decimals))));
     }
 }

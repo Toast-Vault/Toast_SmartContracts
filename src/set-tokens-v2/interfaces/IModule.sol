@@ -17,7 +17,6 @@
 */
 pragma solidity 0.6.10;
 
-
 /**
  * @title IModule
  * @author Set Protocol

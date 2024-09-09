@@ -24,7 +24,6 @@ pragma solidity 0.6.10;
  * Interface for interacting with PriceOracle
  */
 interface IPriceOracle {
-
     /* ============ Functions ============ */
 
     function getPrice(address _assetOne, address _assetTwo) external view returns (uint256);

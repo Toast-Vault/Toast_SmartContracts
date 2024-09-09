@@ -7,24 +7,16 @@ import {CustomOracleNavIssuanceModule} from "@setToken/contracts/protocol/module
 import {IWETH} from "@setToken/contracts/interfaces/external/IWETH.sol";
 
 contract DeployCustomOracleNavIssuanceModule is Script {
-    IController controller =
-        IController(0x9Df9fef12Fa512315CC9F3e5C1D2faFf1bB04a72);
+    IController controller = IController(0x9Df9fef12Fa512315CC9F3e5C1D2faFf1bB04a72);
     IWETH wEth = IWETH(0x295349FBB6de65686382b20189632434894Ebe42);
 
     function run() external returns (CustomOracleNavIssuanceModule) {
-        uint256 deployerPrivateKey = vm.envUint(
-            "SET_TOKEN_MANAGER_PRIVATE_KEY"
-        );
+        uint256 deployerPrivateKey = vm.envUint("SET_TOKEN_MANAGER_PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        CustomOracleNavIssuanceModule customOracleNavIssuanceModule = new CustomOracleNavIssuanceModule(
-                controller,
-                wEth
-            );
+        CustomOracleNavIssuanceModule customOracleNavIssuanceModule =
+            new CustomOracleNavIssuanceModule(controller, wEth);
         vm.stopBroadcast();
-        console.log(
-            "CustomOracleNavIssuance Module: %s",
-            address(customOracleNavIssuanceModule)
-        );
+        console.log("CustomOracleNavIssuance Module: %s", address(customOracleNavIssuanceModule));
         return customOracleNavIssuanceModule;
     }
 }

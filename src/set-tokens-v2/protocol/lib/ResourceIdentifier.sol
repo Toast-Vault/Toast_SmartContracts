@@ -18,10 +18,10 @@
 
 pragma solidity 0.6.10;
 
-import { IController } from "../../interfaces/IController.sol";
-import { IIntegrationRegistry } from "../../interfaces/IIntegrationRegistry.sol";
-import { IPriceOracle } from "../../interfaces/IPriceOracle.sol";
-import { ISetValuer } from "../../interfaces/ISetValuer.sol";
+import {IController} from "../../interfaces/IController.sol";
+import {IIntegrationRegistry} from "../../interfaces/IIntegrationRegistry.sol";
+import {IPriceOracle} from "../../interfaces/IPriceOracle.sol";
+import {ISetValuer} from "../../interfaces/ISetValuer.sol";
 
 /**
  * @title ResourceIdentifier
@@ -30,13 +30,12 @@ import { ISetValuer } from "../../interfaces/ISetValuer.sol";
  * A collection of utility functions to fetch information related to Resource contracts in the system
  */
 library ResourceIdentifier {
-
     // IntegrationRegistry will always be resource ID 0 in the system
-    uint256 constant internal INTEGRATION_REGISTRY_RESOURCE_ID = 0;
+    uint256 internal constant INTEGRATION_REGISTRY_RESOURCE_ID = 0;
     // PriceOracle will always be resource ID 1 in the system
-    uint256 constant internal PRICE_ORACLE_RESOURCE_ID = 1;
+    uint256 internal constant PRICE_ORACLE_RESOURCE_ID = 1;
     // SetValuer resource will always be resource ID 2 in the system
-    uint256 constant internal SET_VALUER_RESOURCE_ID = 2;
+    uint256 internal constant SET_VALUER_RESOURCE_ID = 2;
 
     /* ============ Internal ============ */
 

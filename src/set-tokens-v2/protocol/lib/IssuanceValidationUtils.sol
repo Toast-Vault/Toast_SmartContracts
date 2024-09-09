@@ -18,12 +18,12 @@
 
 pragma solidity 0.6.10;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeCast } from "@openzeppelin/contracts/utils/SafeCast.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
 
-import { ISetToken } from "../../interfaces/ISetToken.sol";
-import { PreciseUnitMath } from "../../lib/PreciseUnitMath.sol";
+import {ISetToken} from "../../interfaces/ISetToken.sol";
+import {PreciseUnitMath} from "../../lib/PreciseUnitMath.sol";
 
 /**
  * @title IssuanceValidationUtils
@@ -46,18 +46,15 @@ library IssuanceValidationUtils {
      * @param _componentQuantity    Amount of component transferred into SetToken
      */
     function validateCollateralizationPostTransferInPreHook(
-        ISetToken _setToken, 
-        address _component, 
+        ISetToken _setToken,
+        address _component,
         uint256 _initialSetSupply,
         uint256 _componentQuantity
-    )
-        internal
-        view
-    {
+    ) internal view {
         uint256 newComponentBalance = IERC20(_component).balanceOf(address(_setToken));
 
         uint256 defaultPositionUnit = _setToken.getDefaultPositionRealUnit(address(_component)).toUint256();
-        
+
         require(
             // Use preciseMulCeil to increase the lower bound and maintain over-collateralization
             newComponentBalance >= _initialSetSupply.preciseMulCeil(defaultPositionUnit).add(_componentQuantity),
@@ -72,13 +69,9 @@ library IssuanceValidationUtils {
      * @param _component        Address of component being transferred in/out
      * @param _finalSetSupply   Final SetToken supply after issuance/redemption
      */
-    function validateCollateralizationPostTransferOut(
-        ISetToken _setToken, 
-        address _component, 
-        uint256 _finalSetSupply
-    )
-        internal 
-        view 
+    function validateCollateralizationPostTransferOut(ISetToken _setToken, address _component, uint256 _finalSetSupply)
+        internal
+        view
     {
         uint256 newComponentBalance = IERC20(_component).balanceOf(address(_setToken));
 

@@ -85,10 +85,7 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
      * @param _controller               Address of controller contract
      * @param _weth                     Address of wrapped eth
      */
-    constructor(
-        IController _controller,
-        IWETH _weth
-    ) public ModuleBase(_controller) {
+    constructor(IController _controller, IWETH _weth) public ModuleBase(_controller) {
         weth = _weth;
     }
 
@@ -120,12 +117,7 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         );
 
         emit ComponentWrapped(
-            _setToken,
-            _underlyingToken,
-            _wrappedToken,
-            notionalUnderlyingWrapped,
-            notionalWrapped,
-            _integrationName
+            _setToken, _underlyingToken, _wrappedToken, notionalUnderlyingWrapped, notionalWrapped, _integrationName
         );
     }
 
@@ -155,12 +147,7 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         );
 
         emit ComponentWrapped(
-            _setToken,
-            address(weth),
-            _wrappedToken,
-            notionalUnderlyingWrapped,
-            notionalWrapped,
-            _integrationName
+            _setToken, address(weth), _wrappedToken, notionalUnderlyingWrapped, notionalWrapped, _integrationName
         );
     }
 
@@ -190,12 +177,7 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         );
 
         emit ComponentUnwrapped(
-            _setToken,
-            _underlyingToken,
-            _wrappedToken,
-            notionalUnderlyingUnwrapped,
-            notionalUnwrapped,
-            _integrationName
+            _setToken, _underlyingToken, _wrappedToken, notionalUnderlyingUnwrapped, notionalUnwrapped, _integrationName
         );
     }
 
@@ -224,12 +206,7 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         );
 
         emit ComponentUnwrapped(
-            _setToken,
-            address(weth),
-            _wrappedToken,
-            notionalUnderlyingUnwrapped,
-            notionalUnwrapped,
-            _integrationName
+            _setToken, address(weth), _wrappedToken, notionalUnderlyingUnwrapped, notionalUnwrapped, _integrationName
         );
     }
 
@@ -238,17 +215,9 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
      *
      * @param _setToken             Instance of the SetToken to issue
      */
-    function initialize(
-        ISetToken _setToken
-    ) external onlySetManager(_setToken, msg.sender) {
-        require(
-            controller.isSet(address(_setToken)),
-            "Must be controller-enabled SetToken"
-        );
-        require(
-            isSetPendingInitialization(_setToken),
-            "Must be pending initialization"
-        );
+    function initialize(ISetToken _setToken) external onlySetManager(_setToken, msg.sender) {
+        require(controller.isSet(address(_setToken)), "Must be controller-enabled SetToken");
+        require(isSetPendingInitialization(_setToken), "Must be pending initialization");
         _setToken.initializeModule();
     }
 
@@ -268,24 +237,14 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
      * It is expected that the adapter will check if wrappedToken/underlyingToken are a valid pair for the given
      * integration.
      */
-    function _validateInputs(
-        ISetToken _setToken,
-        address _transactPosition,
-        uint256 _transactPositionUnits
-    ) internal view {
+    function _validateInputs(ISetToken _setToken, address _transactPosition, uint256 _transactPositionUnits)
+        internal
+        view
+    {
+        require(_transactPositionUnits > 0, "Target position units must be > 0");
+        require(_setToken.hasDefaultPosition(_transactPosition), "Target default position must be component");
         require(
-            _transactPositionUnits > 0,
-            "Target position units must be > 0"
-        );
-        require(
-            _setToken.hasDefaultPosition(_transactPosition),
-            "Target default position must be component"
-        );
-        require(
-            _setToken.hasSufficientDefaultUnits(
-                _transactPosition,
-                _transactPositionUnits
-            ),
+            _setToken.hasSufficientDefaultUnits(_transactPosition, _transactPositionUnits),
             "Unit cant be greater than existing"
         );
     }
@@ -309,36 +268,19 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         _validateInputs(_setToken, _underlyingToken, _underlyingUnits);
 
         // Snapshot pre wrap balances
-        (
-            uint256 preActionUnderlyingNotional,
-            uint256 preActionWrapNotional
-        ) = _snapshotTargetAssetsBalance(
-                _setToken,
-                _underlyingToken,
-                _wrappedToken
-            );
+        (uint256 preActionUnderlyingNotional, uint256 preActionWrapNotional) =
+            _snapshotTargetAssetsBalance(_setToken, _underlyingToken, _wrappedToken);
 
-        uint256 notionalUnderlying = _setToken
-            .totalSupply()
-            .getDefaultTotalNotional(_underlyingUnits);
-        IWrapAdapter wrapAdapter = IWrapAdapter(
-            getAndValidateAdapter(_integrationName)
-        );
+        uint256 notionalUnderlying = _setToken.totalSupply().getDefaultTotalNotional(_underlyingUnits);
+        IWrapAdapter wrapAdapter = IWrapAdapter(getAndValidateAdapter(_integrationName));
 
         // Execute any pre-wrap actions depending on if using raw ETH or not
         if (_usesEther) {
             _setToken.invokeUnwrapWETH(address(weth), notionalUnderlying);
         } else {
-            address spender = wrapAdapter.getSpenderAddress(
-                _underlyingToken,
-                _wrappedToken
-            );
+            address spender = wrapAdapter.getSpenderAddress(_underlyingToken, _wrappedToken);
 
-            _setToken.invokeApprove(
-                _underlyingToken,
-                spender,
-                notionalUnderlying
-            );
+            _setToken.invokeApprove(_underlyingToken, spender, notionalUnderlying);
         }
 
         // Get function call data and invoke on SetToken
@@ -351,27 +293,11 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         );
 
         // Snapshot post wrap balances
-        (
-            uint256 postActionUnderlyingNotional,
-            uint256 postActionWrapNotional
-        ) = _snapshotTargetAssetsBalance(
-                _setToken,
-                _underlyingToken,
-                _wrappedToken
-            );
+        (uint256 postActionUnderlyingNotional, uint256 postActionWrapNotional) =
+            _snapshotTargetAssetsBalance(_setToken, _underlyingToken, _wrappedToken);
 
-        _updatePosition(
-            _setToken,
-            _underlyingToken,
-            preActionUnderlyingNotional,
-            postActionUnderlyingNotional
-        );
-        _updatePosition(
-            _setToken,
-            _wrappedToken,
-            preActionWrapNotional,
-            postActionWrapNotional
-        );
+        _updatePosition(_setToken, _underlyingToken, preActionUnderlyingNotional, postActionUnderlyingNotional);
+        _updatePosition(_setToken, _wrappedToken, preActionWrapNotional, postActionWrapNotional);
 
         return (
             preActionUnderlyingNotional.sub(postActionUnderlyingNotional),
@@ -397,21 +323,11 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
     ) internal returns (uint256, uint256) {
         _validateInputs(_setToken, _wrappedToken, _wrappedTokenUnits);
 
-        (
-            uint256 preActionUnderlyingNotional,
-            uint256 preActionWrapNotional
-        ) = _snapshotTargetAssetsBalance(
-                _setToken,
-                _underlyingToken,
-                _wrappedToken
-            );
+        (uint256 preActionUnderlyingNotional, uint256 preActionWrapNotional) =
+            _snapshotTargetAssetsBalance(_setToken, _underlyingToken, _wrappedToken);
 
-        uint256 notionalWrappedToken = _setToken
-            .totalSupply()
-            .getDefaultTotalNotional(_wrappedTokenUnits);
-        IWrapAdapter wrapAdapter = IWrapAdapter(
-            getAndValidateAdapter(_integrationName)
-        );
+        uint256 notionalWrappedToken = _setToken.totalSupply().getDefaultTotalNotional(_wrappedTokenUnits);
+        IWrapAdapter wrapAdapter = IWrapAdapter(getAndValidateAdapter(_integrationName));
 
         // Get function call data and invoke on SetToken
         _createUnwrapDataAndInvoke(
@@ -426,27 +342,11 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
             _setToken.invokeWrapWETH(address(weth), address(_setToken).balance);
         }
 
-        (
-            uint256 postActionUnderlyingNotional,
-            uint256 postActionWrapNotional
-        ) = _snapshotTargetAssetsBalance(
-                _setToken,
-                _underlyingToken,
-                _wrappedToken
-            );
+        (uint256 postActionUnderlyingNotional, uint256 postActionWrapNotional) =
+            _snapshotTargetAssetsBalance(_setToken, _underlyingToken, _wrappedToken);
 
-        _updatePosition(
-            _setToken,
-            _underlyingToken,
-            preActionUnderlyingNotional,
-            postActionUnderlyingNotional
-        );
-        _updatePosition(
-            _setToken,
-            _wrappedToken,
-            preActionWrapNotional,
-            postActionWrapNotional
-        );
+        _updatePosition(_setToken, _underlyingToken, preActionUnderlyingNotional, postActionUnderlyingNotional);
+        _updatePosition(_setToken, _wrappedToken, preActionWrapNotional, postActionWrapNotional);
 
         return (
             postActionUnderlyingNotional.sub(preActionUnderlyingNotional),
@@ -464,15 +364,8 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         address _wrappedToken,
         uint256 _notionalUnderlying
     ) internal {
-        (
-            address callTarget,
-            uint256 callValue,
-            bytes memory callByteData
-        ) = _wrapAdapter.getWrapCallData(
-                _underlyingToken,
-                _wrappedToken,
-                _notionalUnderlying
-            );
+        (address callTarget, uint256 callValue, bytes memory callByteData) =
+            _wrapAdapter.getWrapCallData(_underlyingToken, _wrappedToken, _notionalUnderlying);
 
         _setToken.invoke(callTarget, callValue, callByteData);
     }
@@ -487,15 +380,8 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         address _wrappedToken,
         uint256 _notionalUnderlying
     ) internal {
-        (
-            address callTarget,
-            uint256 callValue,
-            bytes memory callByteData
-        ) = _wrapAdapter.getUnwrapCallData(
-                _underlyingToken,
-                _wrappedToken,
-                _notionalUnderlying
-            );
+        (address callTarget, uint256 callValue, bytes memory callByteData) =
+            _wrapAdapter.getUnwrapCallData(_underlyingToken, _wrappedToken, _notionalUnderlying);
 
         _setToken.invoke(callTarget, callValue, callByteData);
     }
@@ -510,13 +396,9 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
         uint256 _preActionTokenBalance,
         uint256 _postActionTokenBalance
     ) internal {
-        uint256 newUnit = _setToken
-            .totalSupply()
-            .calculateDefaultEditPositionUnit(
-                _preActionTokenBalance,
-                _postActionTokenBalance,
-                _setToken.getDefaultPositionRealUnit(_token).toUint256()
-            );
+        uint256 newUnit = _setToken.totalSupply().calculateDefaultEditPositionUnit(
+            _preActionTokenBalance, _postActionTokenBalance, _setToken.getDefaultPositionRealUnit(_token).toUint256()
+        );
 
         _setToken.editDefaultPosition(_token, newUnit);
     }
@@ -524,17 +406,13 @@ contract WrapModule is ModuleBase, ReentrancyGuard {
     /**
      * Take snapshot of SetToken's balance of underlying and wrapped tokens.
      */
-    function _snapshotTargetAssetsBalance(
-        ISetToken _setToken,
-        address _underlyingToken,
-        address _wrappedToken
-    ) internal view returns (uint256, uint256) {
-        uint256 underlyingTokenBalance = IERC20(_underlyingToken).balanceOf(
-            address(_setToken)
-        );
-        uint256 wrapTokenBalance = IERC20(_wrappedToken).balanceOf(
-            address(_setToken)
-        );
+    function _snapshotTargetAssetsBalance(ISetToken _setToken, address _underlyingToken, address _wrappedToken)
+        internal
+        view
+        returns (uint256, uint256)
+    {
+        uint256 underlyingTokenBalance = IERC20(_underlyingToken).balanceOf(address(_setToken));
+        uint256 wrapTokenBalance = IERC20(_wrappedToken).balanceOf(address(_setToken));
 
         return (underlyingTokenBalance, wrapTokenBalance);
     }

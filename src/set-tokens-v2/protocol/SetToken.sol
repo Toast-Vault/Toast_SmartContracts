@@ -61,12 +61,7 @@ contract SetToken is ERC20 {
 
     /* ============ Events ============ */
 
-    event Invoked(
-        address indexed _target,
-        uint indexed _value,
-        bytes _data,
-        bytes _returnValue
-    );
+    event Invoked(address indexed _target, uint256 indexed _value, bytes _data, bytes _returnValue);
     event ModuleAdded(address indexed _module);
     event ModuleRemoved(address indexed _module);
     event ModuleInitialized(address indexed _module);
@@ -75,28 +70,11 @@ contract SetToken is ERC20 {
     event PositionMultiplierEdited(int256 _newMultiplier);
     event ComponentAdded(address indexed _component);
     event ComponentRemoved(address indexed _component);
-    event DefaultPositionUnitEdited(
-        address indexed _component,
-        int256 _realUnit
-    );
-    event ExternalPositionUnitEdited(
-        address indexed _component,
-        address indexed _positionModule,
-        int256 _realUnit
-    );
-    event ExternalPositionDataEdited(
-        address indexed _component,
-        address indexed _positionModule,
-        bytes _data
-    );
-    event PositionModuleAdded(
-        address indexed _component,
-        address indexed _positionModule
-    );
-    event PositionModuleRemoved(
-        address indexed _component,
-        address indexed _positionModule
-    );
+    event DefaultPositionUnitEdited(address indexed _component, int256 _realUnit);
+    event ExternalPositionUnitEdited(address indexed _component, address indexed _positionModule, int256 _realUnit);
+    event ExternalPositionDataEdited(address indexed _component, address indexed _positionModule, bytes _data);
+    event PositionModuleAdded(address indexed _component, address indexed _positionModule);
+    event PositionModuleRemoved(address indexed _component, address indexed _positionModule);
 
     /* ============ Modifiers ============ */
 
@@ -212,11 +190,7 @@ contract SetToken is ERC20 {
      * @param _data                   Encoded function selector and arguments
      * @return _returnValue           Bytes encoded return value
      */
-    function invoke(
-        address _target,
-        uint256 _value,
-        bytes calldata _data
-    )
+    function invoke(address _target, uint256 _value, bytes calldata _data)
         external
         onlyModule
         whenLockedOnlyLocker
@@ -232,9 +206,7 @@ contract SetToken is ERC20 {
     /**
      * PRIVELEGED MODULE FUNCTION. Low level function that adds a component to the components array.
      */
-    function addComponent(
-        address _component
-    ) external onlyModule whenLockedOnlyLocker {
+    function addComponent(address _component) external onlyModule whenLockedOnlyLocker {
         require(!isComponent(_component), "Must not be component");
 
         components.push(_component);
@@ -245,9 +217,7 @@ contract SetToken is ERC20 {
     /**
      * PRIVELEGED MODULE FUNCTION. Low level function that removes a component from the components array.
      */
-    function removeComponent(
-        address _component
-    ) external onlyModule whenLockedOnlyLocker {
+    function removeComponent(address _component) external onlyModule whenLockedOnlyLocker {
         components.removeStorage(_component);
 
         emit ComponentRemoved(_component);
@@ -257,10 +227,7 @@ contract SetToken is ERC20 {
      * PRIVELEGED MODULE FUNCTION. Low level function that edits a component's virtual unit. Takes a real unit
      * and converts it to virtual before committing.
      */
-    function editDefaultPositionUnit(
-        address _component,
-        int256 _realUnit
-    ) external onlyModule whenLockedOnlyLocker {
+    function editDefaultPositionUnit(address _component, int256 _realUnit) external onlyModule whenLockedOnlyLocker {
         int256 virtualUnit = _convertRealToVirtualUnit(_realUnit);
 
         componentPositions[_component].virtualUnit = virtualUnit;
@@ -271,18 +238,14 @@ contract SetToken is ERC20 {
     /**
      * PRIVELEGED MODULE FUNCTION. Low level function that adds a module to a component's externalPositionModules array
      */
-    function addExternalPositionModule(
-        address _component,
-        address _positionModule
-    ) external onlyModule whenLockedOnlyLocker {
-        require(
-            !isExternalPositionModule(_component, _positionModule),
-            "Module already added"
-        );
+    function addExternalPositionModule(address _component, address _positionModule)
+        external
+        onlyModule
+        whenLockedOnlyLocker
+    {
+        require(!isExternalPositionModule(_component, _positionModule), "Module already added");
 
-        componentPositions[_component].externalPositionModules.push(
-            _positionModule
-        );
+        componentPositions[_component].externalPositionModules.push(_positionModule);
 
         emit PositionModuleAdded(_component, _positionModule);
     }
@@ -291,13 +254,12 @@ contract SetToken is ERC20 {
      * PRIVELEGED MODULE FUNCTION. Low level function that removes a module from a component's
      * externalPositionModules array and deletes the associated externalPosition.
      */
-    function removeExternalPositionModule(
-        address _component,
-        address _positionModule
-    ) external onlyModule whenLockedOnlyLocker {
-        componentPositions[_component].externalPositionModules.removeStorage(
-            _positionModule
-        );
+    function removeExternalPositionModule(address _component, address _positionModule)
+        external
+        onlyModule
+        whenLockedOnlyLocker
+    {
+        componentPositions[_component].externalPositionModules.removeStorage(_positionModule);
 
         delete componentPositions[_component].externalPositions[
             _positionModule
@@ -310,16 +272,14 @@ contract SetToken is ERC20 {
      * PRIVELEGED MODULE FUNCTION. Low level function that edits a component's external position virtual unit.
      * Takes a real unit and converts it to virtual before committing.
      */
-    function editExternalPositionUnit(
-        address _component,
-        address _positionModule,
-        int256 _realUnit
-    ) external onlyModule whenLockedOnlyLocker {
+    function editExternalPositionUnit(address _component, address _positionModule, int256 _realUnit)
+        external
+        onlyModule
+        whenLockedOnlyLocker
+    {
         int256 virtualUnit = _convertRealToVirtualUnit(_realUnit);
 
-        componentPositions[_component]
-            .externalPositions[_positionModule]
-            .virtualUnit = virtualUnit;
+        componentPositions[_component].externalPositions[_positionModule].virtualUnit = virtualUnit;
 
         emit ExternalPositionUnitEdited(_component, _positionModule, _realUnit);
     }
@@ -327,14 +287,12 @@ contract SetToken is ERC20 {
     /**
      * PRIVELEGED MODULE FUNCTION. Low level function that edits a component's external position data
      */
-    function editExternalPositionData(
-        address _component,
-        address _positionModule,
-        bytes calldata _data
-    ) external onlyModule whenLockedOnlyLocker {
-        componentPositions[_component]
-            .externalPositions[_positionModule]
-            .data = _data;
+    function editExternalPositionData(address _component, address _positionModule, bytes calldata _data)
+        external
+        onlyModule
+        whenLockedOnlyLocker
+    {
+        componentPositions[_component].externalPositions[_positionModule].data = _data;
 
         emit ExternalPositionDataEdited(_component, _positionModule, _data);
     }
@@ -343,9 +301,7 @@ contract SetToken is ERC20 {
      * PRIVELEGED MODULE FUNCTION. Modifies the position multiplier. This is typically used to efficiently
      * update all the Positions' units at once in applications where inflation is awarded (e.g. subscription fees).
      */
-    function editPositionMultiplier(
-        int256 _newMultiplier
-    ) external onlyModule whenLockedOnlyLocker {
+    function editPositionMultiplier(int256 _newMultiplier) external onlyModule whenLockedOnlyLocker {
         _validateNewMultiplier(_newMultiplier);
 
         positionMultiplier = _newMultiplier;
@@ -356,10 +312,7 @@ contract SetToken is ERC20 {
     /**
      * PRIVELEGED MODULE FUNCTION. Increases the "account" balance by the "quantity".
      */
-    function mint(
-        address _account,
-        uint256 _quantity
-    ) external onlyModule whenLockedOnlyLocker {
+    function mint(address _account, uint256 _quantity) external onlyModule whenLockedOnlyLocker {
         _mint(_account, _quantity);
     }
 
@@ -367,10 +320,7 @@ contract SetToken is ERC20 {
      * PRIVELEGED MODULE FUNCTION. Decreases the "account" balance by the "quantity".
      * _burn checks that the "account" already has the required "quantity".
      */
-    function burn(
-        address _account,
-        uint256 _quantity
-    ) external onlyModule whenLockedOnlyLocker {
+    function burn(address _account, uint256 _quantity) external onlyModule whenLockedOnlyLocker {
         _burn(_account, _quantity);
     }
 
@@ -398,10 +348,7 @@ contract SetToken is ERC20 {
      * module's initialize function
      */
     function addModule(address _module) external onlyManager {
-        require(
-            moduleStates[_module] == ISetToken.ModuleState.NONE,
-            "Module must not be added"
-        );
+        require(moduleStates[_module] == ISetToken.ModuleState.NONE, "Module must not be added");
         require(controller.isModule(_module), "Must be enabled on Controller");
 
         moduleStates[_module] = ISetToken.ModuleState.PENDING;
@@ -415,10 +362,7 @@ contract SetToken is ERC20 {
      */
     function removeModule(address _module) external onlyManager {
         require(!isLocked, "Only when unlocked");
-        require(
-            moduleStates[_module] == ISetToken.ModuleState.INITIALIZED,
-            "Module must be added"
-        );
+        require(moduleStates[_module] == ISetToken.ModuleState.INITIALIZED, "Module must be added");
 
         IModule(_module).removeModule();
 
@@ -434,10 +378,7 @@ contract SetToken is ERC20 {
      */
     function removePendingModule(address _module) external onlyManager {
         require(!isLocked, "Only when unlocked");
-        require(
-            moduleStates[_module] == ISetToken.ModuleState.PENDING,
-            "Module must be pending"
-        );
+        require(moduleStates[_module] == ISetToken.ModuleState.PENDING, "Module must be pending");
 
         moduleStates[_module] = ISetToken.ModuleState.NONE;
 
@@ -451,10 +392,7 @@ contract SetToken is ERC20 {
      */
     function initializeModule() external {
         require(!isLocked, "Only when unlocked");
-        require(
-            moduleStates[msg.sender] == ISetToken.ModuleState.PENDING,
-            "Module must be pending"
-        );
+        require(moduleStates[msg.sender] == ISetToken.ModuleState.PENDING, "Module must be pending");
 
         moduleStates[msg.sender] = ISetToken.ModuleState.INITIALIZED;
         modules.push(msg.sender);
@@ -480,33 +418,23 @@ contract SetToken is ERC20 {
         return components;
     }
 
-    function getDefaultPositionRealUnit(
-        address _component
-    ) public view returns (int256) {
-        return
-            _convertVirtualToRealUnit(_defaultPositionVirtualUnit(_component));
+    function getDefaultPositionRealUnit(address _component) public view returns (int256) {
+        return _convertVirtualToRealUnit(_defaultPositionVirtualUnit(_component));
     }
 
-    function getExternalPositionRealUnit(
-        address _component,
-        address _positionModule
-    ) public view returns (int256) {
-        return
-            _convertVirtualToRealUnit(
-                _externalPositionVirtualUnit(_component, _positionModule)
-            );
+    function getExternalPositionRealUnit(address _component, address _positionModule) public view returns (int256) {
+        return _convertVirtualToRealUnit(_externalPositionVirtualUnit(_component, _positionModule));
     }
 
-    function getExternalPositionModules(
-        address _component
-    ) external view returns (address[] memory) {
+    function getExternalPositionModules(address _component) external view returns (address[] memory) {
         return _externalPositionModules(_component);
     }
 
-    function getExternalPositionData(
-        address _component,
-        address _positionModule
-    ) external view returns (bytes memory) {
+    function getExternalPositionData(address _component, address _positionModule)
+        external
+        view
+        returns (bytes memory)
+    {
         return _externalPositionData(_component, _positionModule);
     }
 
@@ -518,10 +446,7 @@ contract SetToken is ERC20 {
         return components.contains(_component);
     }
 
-    function isExternalPositionModule(
-        address _component,
-        address _module
-    ) public view returns (bool) {
+    function isExternalPositionModule(address _component, address _module) public view returns (bool) {
         return _externalPositionModules(_component).contains(_module);
     }
 
@@ -544,14 +469,8 @@ contract SetToken is ERC20 {
      * is considered a Default Position, and each externalPositionModule will generate a unique position.
      * Virtual units are converted to real units. This function is typically used off-chain for data presentation purposes.
      */
-    function getPositions()
-        external
-        view
-        returns (ISetToken.Position[] memory)
-    {
-        ISetToken.Position[] memory positions = new ISetToken.Position[](
-            _getPositionCount()
-        );
+    function getPositions() external view returns (ISetToken.Position[] memory) {
+        ISetToken.Position[] memory positions = new ISetToken.Position[](_getPositionCount());
         uint256 positionCount = 0;
 
         for (uint256 i = 0; i < components.length; i++) {
@@ -570,9 +489,7 @@ contract SetToken is ERC20 {
                 positionCount++;
             }
 
-            address[] memory externalModules = _externalPositionModules(
-                component
-            );
+            address[] memory externalModules = _externalPositionModules(component);
             for (uint256 j = 0; j < externalModules.length; j++) {
                 address currentModule = externalModules[j];
 
@@ -594,17 +511,13 @@ contract SetToken is ERC20 {
     /**
      * Returns the total Real Units for a given component, summing the default and external position units.
      */
-    function getTotalComponentRealUnits(
-        address _component
-    ) external view returns (int256) {
+    function getTotalComponentRealUnits(address _component) external view returns (int256) {
         int256 totalUnits = getDefaultPositionRealUnit(_component);
 
         address[] memory externalModules = _externalPositionModules(_component);
         for (uint256 i = 0; i < externalModules.length; i++) {
             // We will perform the summation no matter what, as an external position virtual unit can be negative
-            totalUnits = totalUnits.add(
-                getExternalPositionRealUnit(_component, externalModules[i])
-            );
+            totalUnits = totalUnits.add(getExternalPositionRealUnit(_component, externalModules[i]));
         }
 
         return totalUnits;
@@ -614,32 +527,19 @@ contract SetToken is ERC20 {
 
     /* ============ Internal Functions ============ */
 
-    function _defaultPositionVirtualUnit(
-        address _component
-    ) internal view returns (int256) {
+    function _defaultPositionVirtualUnit(address _component) internal view returns (int256) {
         return componentPositions[_component].virtualUnit;
     }
 
-    function _externalPositionModules(
-        address _component
-    ) internal view returns (address[] memory) {
+    function _externalPositionModules(address _component) internal view returns (address[] memory) {
         return componentPositions[_component].externalPositionModules;
     }
 
-    function _externalPositionVirtualUnit(
-        address _component,
-        address _module
-    ) internal view returns (int256) {
-        return
-            componentPositions[_component]
-                .externalPositions[_module]
-                .virtualUnit;
+    function _externalPositionVirtualUnit(address _component, address _module) internal view returns (int256) {
+        return componentPositions[_component].externalPositions[_module].virtualUnit;
     }
 
-    function _externalPositionData(
-        address _component,
-        address _module
-    ) internal view returns (bytes memory) {
+    function _externalPositionData(address _component, address _module) internal view returns (bytes memory) {
         return componentPositions[_component].externalPositions[_module].data;
     }
 
@@ -647,12 +547,8 @@ contract SetToken is ERC20 {
      * Takes a real unit and divides by the position multiplier to return the virtual unit. Negative units will
      * be rounded away from 0 so no need to check that unit will be rounded down to 0 in conversion.
      */
-    function _convertRealToVirtualUnit(
-        int256 _realUnit
-    ) internal view returns (int256) {
-        int256 virtualUnit = _realUnit.conservativePreciseDiv(
-            positionMultiplier
-        );
+    function _convertRealToVirtualUnit(int256 _realUnit) internal view returns (int256) {
+        int256 virtualUnit = _realUnit.conservativePreciseDiv(positionMultiplier);
 
         // This check ensures that the virtual unit does not return a result that has rounded down to 0
         if (_realUnit > 0 && virtualUnit == 0) {
@@ -670,9 +566,7 @@ contract SetToken is ERC20 {
     /**
      * Takes a virtual unit and multiplies by the position multiplier to return the real unit
      */
-    function _convertVirtualToRealUnit(
-        int256 _virtualUnit
-    ) internal view returns (int256) {
+    function _convertVirtualToRealUnit(int256 _virtualUnit) internal view returns (int256) {
         return _virtualUnit.conservativePreciseMul(positionMultiplier);
     }
 
@@ -684,10 +578,7 @@ contract SetToken is ERC20 {
     function _validateNewMultiplier(int256 _newMultiplier) internal view {
         int256 minVirtualUnit = _getPositionsAbsMinimumVirtualUnit();
 
-        require(
-            minVirtualUnit.conservativePreciseMul(_newMultiplier) > 0,
-            "New multiplier too small"
-        );
+        require(minVirtualUnit.conservativePreciseMul(_newMultiplier) > 0, "New multiplier too small");
     }
 
     /**
@@ -696,11 +587,7 @@ contract SetToken is ERC20 {
      *
      * @return Min virtual unit across positions denominated as int256
      */
-    function _getPositionsAbsMinimumVirtualUnit()
-        internal
-        view
-        returns (int256)
-    {
+    function _getPositionsAbsMinimumVirtualUnit() internal view returns (int256) {
         // Additional assignment happens in the loop below
         uint256 minimumUnit = uint256(-1);
 
@@ -708,21 +595,16 @@ contract SetToken is ERC20 {
             address component = components[i];
 
             // A default position exists if the default virtual unit is > 0
-            uint256 defaultUnit = _defaultPositionVirtualUnit(component)
-                .toUint256();
+            uint256 defaultUnit = _defaultPositionVirtualUnit(component).toUint256();
             if (defaultUnit > 0 && defaultUnit < minimumUnit) {
                 minimumUnit = defaultUnit;
             }
 
-            address[] memory externalModules = _externalPositionModules(
-                component
-            );
+            address[] memory externalModules = _externalPositionModules(component);
             for (uint256 j = 0; j < externalModules.length; j++) {
                 address currentModule = externalModules[j];
 
-                uint256 virtualUnit = _absoluteValue(
-                    _externalPositionVirtualUnit(component, currentModule)
-                );
+                uint256 virtualUnit = _absoluteValue(_externalPositionVirtualUnit(component, currentModule));
                 if (virtualUnit > 0 && virtualUnit < minimumUnit) {
                     minimumUnit = virtualUnit;
                 }
@@ -748,9 +630,7 @@ contract SetToken is ERC20 {
             }
 
             // Increment the position count by each external position module
-            address[] memory externalModules = _externalPositionModules(
-                component
-            );
+            address[] memory externalModules = _externalPositionModules(component);
             if (externalModules.length > 0) {
                 positionCount = positionCount.add(externalModules.length);
             }
@@ -774,15 +654,9 @@ contract SetToken is ERC20 {
      * Module must be initialized on the SetToken and enabled by the controller
      */
     function _validateOnlyModule() internal view {
-        require(
-            moduleStates[msg.sender] == ISetToken.ModuleState.INITIALIZED,
-            "Only the module can call"
-        );
+        require(moduleStates[msg.sender] == ISetToken.ModuleState.INITIALIZED, "Only the module can call");
 
-        require(
-            controller.isModule(msg.sender),
-            "Module must be enabled on controller"
-        );
+        require(controller.isModule(msg.sender), "Module must be enabled on controller");
     }
 
     function _validateOnlyManager() internal view {
@@ -791,10 +665,7 @@ contract SetToken is ERC20 {
 
     function _validateWhenLockedOnlyLocker() internal view {
         if (isLocked) {
-            require(
-                msg.sender == locker,
-                "When locked, only the locker can call"
-            );
+            require(msg.sender == locker, "When locked, only the locker can call");
         }
     }
 }

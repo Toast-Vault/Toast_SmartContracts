@@ -18,11 +18,10 @@
 
 pragma solidity 0.6.10;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
 
-import { ISetToken } from "../../interfaces/ISetToken.sol";
-
+import {ISetToken} from "../../interfaces/ISetToken.sol";
 
 /**
  * @title Invoke
@@ -43,14 +42,7 @@ library Invoke {
      * @param _spender         The account allowed to spend the SetToken's balance
      * @param _quantity        The quantity of allowance to allow
      */
-    function invokeApprove(
-        ISetToken _setToken,
-        address _token,
-        address _spender,
-        uint256 _quantity
-    )
-        internal
-    {
+    function invokeApprove(ISetToken _setToken, address _token, address _spender, uint256 _quantity) internal {
         bytes memory callData = abi.encodeWithSignature("approve(address,uint256)", _spender, _quantity);
         _setToken.invoke(_token, 0, callData);
     }
@@ -63,14 +55,7 @@ library Invoke {
      * @param _to              The recipient account
      * @param _quantity        The quantity to transfer
      */
-    function invokeTransfer(
-        ISetToken _setToken,
-        address _token,
-        address _to,
-        uint256 _quantity
-    )
-        internal
-    {
+    function invokeTransfer(ISetToken _setToken, address _token, address _to, uint256 _quantity) internal {
         if (_quantity > 0) {
             bytes memory callData = abi.encodeWithSignature("transfer(address,uint256)", _to, _quantity);
             _setToken.invoke(_token, 0, callData);
@@ -86,14 +71,7 @@ library Invoke {
      * @param _to              The recipient account
      * @param _quantity        The quantity to transfer
      */
-    function strictInvokeTransfer(
-        ISetToken _setToken,
-        address _token,
-        address _to,
-        uint256 _quantity
-    )
-        internal
-    {
+    function strictInvokeTransfer(ISetToken _setToken, address _token, address _to, uint256 _quantity) internal {
         if (_quantity > 0) {
             // Retrieve current balance of token for the SetToken
             uint256 existingBalance = IERC20(_token).balanceOf(address(_setToken));
@@ -104,10 +82,7 @@ library Invoke {
             uint256 newBalance = IERC20(_token).balanceOf(address(_setToken));
 
             // Verify only the transfer quantity is subtracted
-            require(
-                newBalance == existingBalance.sub(_quantity),
-                "Invalid post transfer balance"
-            );
+            require(newBalance == existingBalance.sub(_quantity), "Invalid post transfer balance");
         }
     }
 

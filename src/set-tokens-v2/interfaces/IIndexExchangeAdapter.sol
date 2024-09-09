@@ -18,7 +18,7 @@
 pragma solidity 0.6.10;
 
 interface IIndexExchangeAdapter {
-    function getSpender() external view returns(address);
+    function getSpender() external view returns (address);
 
     /**
      * Returns calldata for executing trade on given adapter's exchange when using the GeneralIndexModule.
@@ -43,8 +43,5 @@ interface IIndexExchangeAdapter {
         uint256 _sourceQuantity,
         uint256 _destinationQuantity,
         bytes memory _data
-    )
-        external
-        view
-        returns (address, uint256, bytes memory);
+    ) external view returns (address, uint256, bytes memory);
 }

@@ -17,7 +17,6 @@
 */
 pragma solidity 0.6.10;
 
-
 /**
  * @title IOracleAdapter
  * @author Set Protocol
@@ -25,7 +24,6 @@ pragma solidity 0.6.10;
  * Interface for calling an oracle adapter.
  */
 interface IOracleAdapter {
-
     /**
      * Function for retrieving a price that requires sourcing data from outside protocols to calculate.
      *

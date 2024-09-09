@@ -18,10 +18,10 @@
 
 pragma solidity 0.6.10;
 
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-import { IController } from "../../interfaces/IController.sol";
-import { ISetToken } from "../../interfaces/ISetToken.sol";
+import {IController} from "../../interfaces/IController.sol";
+import {ISetToken} from "../../interfaces/ISetToken.sol";
 
 /**
  * @title  SetTokenAccessible
@@ -30,7 +30,6 @@ import { ISetToken } from "../../interfaces/ISetToken.sol";
  * Abstract class that houses permissioning of module for SetTokens.
  */
 abstract contract SetTokenAccessible is Ownable {
-
     /* ============ Events ============ */
 
     /**
@@ -38,18 +37,13 @@ abstract contract SetTokenAccessible is Ownable {
      * @param _setToken SetToken being whose allowance to initialize this module is being updated
      * @param _added    true if added false if removed
      */
-    event SetTokenStatusUpdated(
-        ISetToken indexed _setToken,
-        bool indexed _added
-    );
+    event SetTokenStatusUpdated(ISetToken indexed _setToken, bool indexed _added);
 
     /**
      * @dev Emitted on updateAnySetAllowed()
      * @param _anySetAllowed    true if any set is allowed to initialize this module, false otherwise
      */
-    event AnySetAllowedUpdated(
-        bool indexed _anySetAllowed
-    );
+    event AnySetAllowedUpdated(bool indexed _anySetAllowed);
 
     /* ============ Modifiers ============ */
 
@@ -73,7 +67,6 @@ abstract contract SetTokenAccessible is Ownable {
     // Boolean that returns if any SetToken can initialize this module. If false, then subject to allow list.
     // Updateable by governance.
     bool public anySetAllowed;
-
 
     /* ============ Constructor ============ */
 

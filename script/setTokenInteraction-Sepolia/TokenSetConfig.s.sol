@@ -8,35 +8,23 @@ import {Controller} from "@setToken/contracts/protocol/Controller.sol";
 import {ISetValuer} from "@setToken/contracts/interfaces/ISetValuer.sol";
 
 contract TokenSetConfig is Script, ContractAddresses {
-    address public controllerManager =
-        0x00fBd18efDE748E1B3f7Bb01C79FbC318610b807;
+    address public controllerManager = 0x00fBd18efDE748E1B3f7Bb01C79FbC318610b807;
     address public tokenSetManager = 0xfeB42b6c3c4250F435c20cFF22eA2FE386A830F2;
 
     function run() external {
         uint256 tokenSetManagerPrivateKey = vm.envUint("MANAGER_PRIVATE_KEY");
-        uint256 controllerManagerPrivateKey = vm.envUint(
-            "SET_TOKEN_MANAGER_PRIVATE_KEY"
-        );
+        uint256 controllerManagerPrivateKey = vm.envUint("SET_TOKEN_MANAGER_PRIVATE_KEY");
 
         setManagerController(controllerManager, controllerManagerPrivateKey);
         setManagerTokenSet(tokenSetManager, tokenSetManagerPrivateKey);
         getControllerManager();
         getTokenSetManager();
-        setModuleStatePending(
-            customOracleNavIssuanceModuleAddress,
-            tokenSetManagerPrivateKey
-        );
-        isModulePending(
-            address(usdcBtcLink),
-            customOracleNavIssuanceModuleAddress
-        );
+        setModuleStatePending(customOracleNavIssuanceModuleAddress, tokenSetManagerPrivateKey);
+        isModulePending(address(usdcBtcLink), customOracleNavIssuanceModuleAddress);
         getModules(address(usdcBtcLink));
     }
 
-    function setManagerController(
-        address newManager,
-        uint256 privateKey
-    ) public {
+    function setManagerController(address newManager, uint256 privateKey) public {
         Controller controller = Controller(address(controllerAddress));
         vm.startBroadcast(privateKey);
         controller.transferOwnership(newManager);
@@ -72,10 +60,7 @@ contract TokenSetConfig is Script, ContractAddresses {
         console.log("Set token manager: %s", owner);
     }
 
-    function isModulePending(
-        address setTokenAdd,
-        address module
-    ) public view returns (bool) {
+    function isModulePending(address setTokenAdd, address module) public view returns (bool) {
         SetToken setToken = SetToken(payable(setTokenAdd));
         bool isPending = setToken.isPendingModule(module);
         console.log("Is %s module pending? %s", module, isPending);

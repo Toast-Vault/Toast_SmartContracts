@@ -25,7 +25,6 @@ pragma solidity 0.6.10;
  * Utility functions to handle Uint256 Arrays
  */
 library Uint256ArrayUtils {
-
     /**
      * Returns the combination of the two arrays
      * @param A The first array

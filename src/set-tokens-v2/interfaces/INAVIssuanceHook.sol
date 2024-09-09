@@ -17,7 +17,7 @@
 */
 pragma solidity 0.6.10;
 
-import { ISetToken } from "./ISetToken.sol";
+import {ISetToken} from "./ISetToken.sol";
 
 interface INAVIssuanceHook {
     function invokePreIssueHook(
@@ -26,14 +26,7 @@ interface INAVIssuanceHook {
         uint256 _reserveAssetQuantity,
         address _sender,
         address _to
-    )
-        external;
+    ) external;
 
-    function invokePreRedeemHook(
-        ISetToken _setToken,
-        uint256 _redeemQuantity,
-        address _sender,
-        address _to
-    )
-        external;
+    function invokePreRedeemHook(ISetToken _setToken, uint256 _redeemQuantity, address _sender, address _to) external;
 }

@@ -18,20 +18,20 @@
 
 pragma solidity 0.6.10;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import { AddressArrayUtils } from "../../lib/AddressArrayUtils.sol";
-import { ExplicitERC20 } from "../../lib/ExplicitERC20.sol";
-import { IController } from "../../interfaces/IController.sol";
-import { IModule } from "../../interfaces/IModule.sol";
-import { ISetToken } from "../../interfaces/ISetToken.sol";
-import { Invoke } from "./Invoke.sol";
-import { Position } from "./Position.sol";
-import { PreciseUnitMath } from "../../lib/PreciseUnitMath.sol";
-import { ResourceIdentifier } from "./ResourceIdentifier.sol";
-import { SafeCast } from "@openzeppelin/contracts/utils/SafeCast.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
-import { SignedSafeMath } from "@openzeppelin/contracts/math/SignedSafeMath.sol";
+import {AddressArrayUtils} from "../../lib/AddressArrayUtils.sol";
+import {ExplicitERC20} from "../../lib/ExplicitERC20.sol";
+import {IController} from "../../interfaces/IController.sol";
+import {IModule} from "../../interfaces/IModule.sol";
+import {ISetToken} from "../../interfaces/ISetToken.sol";
+import {Invoke} from "./Invoke.sol";
+import {Position} from "./Position.sol";
+import {PreciseUnitMath} from "../../lib/PreciseUnitMath.sol";
+import {ResourceIdentifier} from "./ResourceIdentifier.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SignedSafeMath} from "@openzeppelin/contracts/math/SignedSafeMath.sol";
 
 /**
  * @title ModuleBase
@@ -121,7 +121,7 @@ abstract contract ModuleBase is IModule {
     /**
      * Gets the integration for the module with the passed in name. Validates that the address is not empty
      */
-    function getAndValidateAdapter(string memory _integrationName) internal view returns(address) { 
+    function getAndValidateAdapter(string memory _integrationName) internal view returns (address) {
         bytes32 integrationHash = getNameHash(_integrationName);
         return getAndValidateAdapterWithHash(integrationHash);
     }
@@ -129,20 +129,18 @@ abstract contract ModuleBase is IModule {
     /**
      * Gets the integration for the module with the passed in hash. Validates that the address is not empty
      */
-    function getAndValidateAdapterWithHash(bytes32 _integrationHash) internal view returns(address) { 
-        address adapter = controller.getIntegrationRegistry().getIntegrationAdapterWithHash(
-            address(this),
-            _integrationHash
-        );
+    function getAndValidateAdapterWithHash(bytes32 _integrationHash) internal view returns (address) {
+        address adapter =
+            controller.getIntegrationRegistry().getIntegrationAdapterWithHash(address(this), _integrationHash);
 
-        require(adapter != address(0), "Must be valid adapter"); 
+        require(adapter != address(0), "Must be valid adapter");
         return adapter;
     }
 
     /**
      * Gets the total fee for this module of the passed in index (fee % * quantity)
      */
-    function getModuleFee(uint256 _feeIndex, uint256 _quantity) internal view returns(uint256) {
+    function getModuleFee(uint256 _feeIndex, uint256 _quantity) internal view returns (uint256) {
         uint256 feePercentage = controller.getModuleFee(address(this), _feeIndex);
         return _quantity.preciseMul(feePercentage);
     }
@@ -152,37 +150,36 @@ abstract contract ModuleBase is IModule {
      */
     function payProtocolFeeFromSetToken(ISetToken _setToken, address _token, uint256 _feeQuantity) internal {
         if (_feeQuantity > 0) {
-            _setToken.strictInvokeTransfer(_token, controller.feeRecipient(), _feeQuantity); 
+            _setToken.strictInvokeTransfer(_token, controller.feeRecipient(), _feeQuantity);
         }
     }
 
     /**
      * Returns true if the module is in process of initialization on the SetToken
      */
-    function isSetPendingInitialization(ISetToken _setToken) internal view returns(bool) {
+    function isSetPendingInitialization(ISetToken _setToken) internal view returns (bool) {
         return _setToken.isPendingModule(address(this));
     }
 
     /**
      * Returns true if the address is the SetToken's manager
      */
-    function isSetManager(ISetToken _setToken, address _toCheck) internal view returns(bool) {
+    function isSetManager(ISetToken _setToken, address _toCheck) internal view returns (bool) {
         return _setToken.manager() == _toCheck;
     }
 
     /**
-     * Returns true if SetToken must be enabled on the controller 
+     * Returns true if SetToken must be enabled on the controller
      * and module is registered on the SetToken
      */
-    function isSetValidAndInitialized(ISetToken _setToken) internal view returns(bool) {
-        return controller.isSet(address(_setToken)) &&
-            _setToken.isInitializedModule(address(this));
+    function isSetValidAndInitialized(ISetToken _setToken) internal view returns (bool) {
+        return controller.isSet(address(_setToken)) && _setToken.isInitializedModule(address(this));
     }
 
     /**
      * Hashes the string and returns a bytes32 value
      */
-    function getNameHash(string memory _name) internal pure returns(bytes32) {
+    function getNameHash(string memory _name) internal pure returns (bytes32) {
         return keccak256(bytes(_name));
     }
 
@@ -194,8 +191,8 @@ abstract contract ModuleBase is IModule {
      * Caller must SetToken manager and SetToken must be valid and initialized
      */
     function _validateOnlyManagerAndValidSet(ISetToken _setToken) internal view {
-       require(isSetManager(_setToken, msg.sender), "Must be the SetToken manager");
-       require(isSetValidAndInitialized(_setToken), "Must be a valid and initialized SetToken");
+        require(isSetManager(_setToken, msg.sender), "Must be the SetToken manager");
+        require(isSetValidAndInitialized(_setToken), "Must be a valid and initialized SetToken");
     }
 
     /**
@@ -216,15 +213,9 @@ abstract contract ModuleBase is IModule {
      * Caller must be initialized module and module must be enabled on the controller
      */
     function _validateOnlyModule(ISetToken _setToken) internal view {
-        require(
-            _setToken.moduleStates(msg.sender) == ISetToken.ModuleState.INITIALIZED,
-            "Only the module can call"
-        );
+        require(_setToken.moduleStates(msg.sender) == ISetToken.ModuleState.INITIALIZED, "Only the module can call");
 
-        require(
-            controller.isModule(msg.sender),
-            "Module must be enabled on controller"
-        );
+        require(controller.isModule(msg.sender), "Module must be enabled on controller");
     }
 
     /**

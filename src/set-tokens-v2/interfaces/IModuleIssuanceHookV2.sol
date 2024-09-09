@@ -17,10 +17,9 @@
 */
 pragma solidity 0.6.10;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import { ISetToken } from "./ISetToken.sol";
-
+import {ISetToken} from "./ISetToken.sol";
 
 /**
  * CHANGELOG:
@@ -30,23 +29,14 @@ import { ISetToken } from "./ISetToken.sol";
  *        the issuance module in order to give more accurate token flow information
  */
 interface IModuleIssuanceHookV2 {
-
     function moduleIssueHook(ISetToken _setToken, uint256 _setTokenQuantity) external;
     function moduleRedeemHook(ISetToken _setToken, uint256 _setTokenQuantity) external;
 
-    function componentIssueHook(
-        ISetToken _setToken,
-        uint256 _setTokenQuantity,
-        IERC20 _component,
-        bool _isEquity
-    ) external;
+    function componentIssueHook(ISetToken _setToken, uint256 _setTokenQuantity, IERC20 _component, bool _isEquity)
+        external;
 
-    function componentRedeemHook(
-        ISetToken _setToken,
-        uint256 _setTokenQuantity,
-        IERC20 _component,
-        bool _isEquity
-    ) external;
+    function componentRedeemHook(ISetToken _setToken, uint256 _setTokenQuantity, IERC20 _component, bool _isEquity)
+        external;
 
     /**
      * Adjustments should return the NET CHANGE in POSITION UNITS for each component in the SetToken's
@@ -57,10 +47,7 @@ interface IModuleIssuanceHookV2 {
      * NOTE: This getter is non-view to allow module hooks to determine units by simulating state changes in
      * an external protocol and reverting. It should only be called by off-chain methods via static call.
      */
-    function getIssuanceAdjustments(
-        ISetToken _setToken,
-        uint256 _setTokenQuantity
-    )
+    function getIssuanceAdjustments(ISetToken _setToken, uint256 _setTokenQuantity)
         external
         returns (int256[] memory, int256[] memory);
 
@@ -73,10 +60,7 @@ interface IModuleIssuanceHookV2 {
      * NOTE: This getter is non-view to allow module hooks to determine units by simulating state changes in
      * an external protocol and reverting. It should only be called by off-chain methods via static call.
      */
-    function getRedemptionAdjustments(
-        ISetToken _setToken,
-        uint256 _setTokenQuantity
-    )
+    function getRedemptionAdjustments(ISetToken _setToken, uint256 _setTokenQuantity)
         external
         returns (int256[] memory, int256[] memory);
 }

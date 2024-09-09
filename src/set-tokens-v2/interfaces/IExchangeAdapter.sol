@@ -18,7 +18,7 @@
 pragma solidity 0.6.10;
 
 interface IExchangeAdapter {
-    function getSpender() external view returns(address);
+    function getSpender() external view returns (address);
     function getTradeCalldata(
         address _fromToken,
         address _toToken,
@@ -26,8 +26,5 @@ interface IExchangeAdapter {
         uint256 _fromQuantity,
         uint256 _minToQuantity,
         bytes memory _data
-    )
-        external
-        view
-        returns (address, uint256, bytes memory);
+    ) external view returns (address, uint256, bytes memory);
 }

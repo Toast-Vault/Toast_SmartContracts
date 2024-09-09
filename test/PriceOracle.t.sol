@@ -28,14 +28,20 @@ contract PriceOracleTest is Test, ContractAddresses {
         priceOracle = deployer.run();
     }
 
-    function testWethUsdcOracleId() public view checkFork {
+    function testWethUsdcOracleId() public checkFork {
+        if (vm.activeFork() != sepoliaFork) {
+            vm.skip(true);
+        }
         bytes32 oracleId = priceOracle.oracles(weth, usdc);
         assertEq(oracleId, eth_usd);
     }
 
-    function testWethUsdcPrice() public view checkFork {
+    function testWethUsdcPrice() public checkFork {
+        if (vm.activeFork() != sepoliaFork) {
+            vm.skip(true);
+        }
         uint256 oraclePrice = priceOracle.getPrice(weth, usdc);
         PythStructs.Price memory priceStruct = pyth.getPriceUnsafe(eth_usd);
-        assertEq(oraclePrice, uint(priceStruct.price) * multiplier);
+        assertEq(oraclePrice, uint256(priceStruct.price) * multiplier);
     }
 }

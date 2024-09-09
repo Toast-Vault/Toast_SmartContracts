@@ -19,16 +19,15 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import { SafeCast } from "@openzeppelin/contracts/utils/SafeCast.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
-import { SignedSafeMath } from "@openzeppelin/contracts/math/SignedSafeMath.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SignedSafeMath} from "@openzeppelin/contracts/math/SignedSafeMath.sol";
 
-import { IController } from "../../../interfaces/IController.sol";
-import { ISetToken } from "../../../interfaces/ISetToken.sol";
-import { ModuleBase } from "../../lib/ModuleBase.sol";
-import { PreciseUnitMath } from "../../../lib/PreciseUnitMath.sol";
-
+import {IController} from "../../../interfaces/IController.sol";
+import {ISetToken} from "../../../interfaces/ISetToken.sol";
+import {ModuleBase} from "../../lib/ModuleBase.sol";
+import {PreciseUnitMath} from "../../../lib/PreciseUnitMath.sol";
 
 /**
  * @title StreamingFeeModule
@@ -46,14 +45,13 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
     using PreciseUnitMath for int256;
     using SafeCast for int256;
 
-
     /* ============ Structs ============ */
 
     struct FeeState {
-        address feeRecipient;                   // Address to accrue fees to
-        uint256 maxStreamingFeePercentage;      // Max streaming fee maanager commits to using (1% = 1e16, 100% = 1e18)
-        uint256 streamingFeePercentage;         // Percent of Set accruing to manager annually (1% = 1e16, 100% = 1e18)
-        uint256 lastStreamingFeeTimestamp;      // Timestamp last streaming fee was accrued
+        address feeRecipient; // Address to accrue fees to
+        uint256 maxStreamingFeePercentage; // Max streaming fee maanager commits to using (1% = 1e16, 100% = 1e18)
+        uint256 streamingFeePercentage; // Percent of Set accruing to manager annually (1% = 1e16, 100% = 1e18)
+        uint256 lastStreamingFeeTimestamp; // Timestamp last streaming fee was accrued
     }
 
     /* ============ Events ============ */
@@ -94,10 +92,7 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
             uint256 feeQuantity = _calculateStreamingFeeInflation(_setToken, inflationFeePercentage);
 
             // Mint new Sets to manager and protocol
-            (
-                managerFee,
-                protocolFee
-            ) = _mintManagerAndProtocolFee(_setToken, feeQuantity);
+            (managerFee, protocolFee) = _mintManagerAndProtocolFee(_setToken, feeQuantity);
 
             _editPositionMultiplier(_setToken, inflationFeePercentage);
         }
@@ -114,10 +109,7 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
      * @param _setToken                 Address of SetToken
      * @param _settings                 FeeState struct defining fee parameters
      */
-    function initialize(
-        ISetToken _setToken,
-        FeeState memory _settings
-    )
+    function initialize(ISetToken _setToken, FeeState memory _settings)
         external
         onlySetManager(_setToken, msg.sender)
         onlyValidAndPendingSet(_setToken)
@@ -147,10 +139,7 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
      * @param _setToken       Address of SetToken
      * @param _newFee         New streaming fee 18 decimal precision
      */
-    function updateStreamingFee(
-        ISetToken _setToken,
-        uint256 _newFee
-    )
+    function updateStreamingFee(ISetToken _setToken, uint256 _newFee)
         external
         onlySetManager(_setToken, msg.sender)
         onlyValidAndInitializedSet(_setToken)
@@ -200,7 +189,7 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
      * @param  _setToken          Address of Set to have feeState updated
      * @return uint256            Streaming fee denominated in percentage of totalSupply
      */
-    function _calculateStreamingFee(ISetToken _setToken) internal view returns(uint256) {
+    function _calculateStreamingFee(ISetToken _setToken) internal view returns (uint256) {
         uint256 timeSinceLastFee = block.timestamp.sub(_lastStreamingFeeTimestamp(_setToken));
 
         // Streaming fee is streaming fee times years since last fee
@@ -221,10 +210,7 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
      * @param   _feePercentage          Fee levied to feeRecipient
      * @return  uint256                 New RebalancingSet issue quantity
      */
-    function _calculateStreamingFeeInflation(
-        ISetToken _setToken,
-        uint256 _feePercentage
-    )
+    function _calculateStreamingFeeInflation(ISetToken _setToken, uint256 _feePercentage)
         internal
         view
         returns (uint256)
@@ -249,7 +235,10 @@ contract StreamingFeeModule is ModuleBase, ReentrancyGuard {
      * @return  uint256                 Amount of Sets accrued to manager as fee
      * @return  uint256                 Amount of Sets accrued to protocol as fee
      */
-    function _mintManagerAndProtocolFee(ISetToken _setToken, uint256 _feeQuantity) internal returns (uint256, uint256) {
+    function _mintManagerAndProtocolFee(ISetToken _setToken, uint256 _feeQuantity)
+        internal
+        returns (uint256, uint256)
+    {
         address protocolFeeRecipient = controller.feeRecipient();
         uint256 protocolFee = controller.getModuleFee(address(this), PROTOCOL_STREAMING_FEE_INDEX);
 

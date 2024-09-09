@@ -17,27 +17,30 @@
 */
 pragma solidity 0.6.10;
 
-
 /**
  * @title IGovernanceAdapter
  * @author Set Protocol
  */
 interface IGovernanceAdapter {
-
-    function getVoteCalldata(
-        uint256 _proposalId,
-        bool _support,
-        bytes memory _data
-    )
+    function getVoteCalldata(uint256 _proposalId, bool _support, bytes memory _data)
         external
         view
         returns (address _target, uint256 _value, bytes memory _calldata);
 
-    function getDelegateCalldata(address _delegatee) external view returns (address _target, uint256 _value, bytes memory _calldata);
+    function getDelegateCalldata(address _delegatee)
+        external
+        view
+        returns (address _target, uint256 _value, bytes memory _calldata);
 
-    function getRegisterCalldata(address _setToken) external view returns (address _target, uint256 _value, bytes memory _calldata);
+    function getRegisterCalldata(address _setToken)
+        external
+        view
+        returns (address _target, uint256 _value, bytes memory _calldata);
 
     function getRevokeCalldata() external view returns (address _target, uint256 _value, bytes memory _calldata);
 
-    function getProposeCalldata(bytes memory _proposalData) external view returns (address _target, uint256 _value, bytes memory _calldata);
+    function getProposeCalldata(bytes memory _proposalData)
+        external
+        view
+        returns (address _target, uint256 _value, bytes memory _calldata);
 }

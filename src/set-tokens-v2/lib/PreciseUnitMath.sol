@@ -19,10 +19,9 @@
 pragma solidity 0.6.10;
 pragma experimental ABIEncoderV2;
 
-import { SafeCast } from "@openzeppelin/contracts/utils/SafeCast.sol";
-import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
-import { SignedSafeMath } from "@openzeppelin/contracts/math/SignedSafeMath.sol";
-
+import {SafeCast} from "@openzeppelin/contracts/utils/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SignedSafeMath} from "@openzeppelin/contracts/math/SignedSafeMath.sol";
 
 /**
  * @title PreciseUnitMath
@@ -43,14 +42,14 @@ library PreciseUnitMath {
     using SafeCast for int256;
 
     // The number One in precise units.
-    uint256 constant internal PRECISE_UNIT = 10 ** 18;
-    int256 constant internal PRECISE_UNIT_INT = 10 ** 18;
+    uint256 internal constant PRECISE_UNIT = 10 ** 18;
+    int256 internal constant PRECISE_UNIT_INT = 10 ** 18;
 
     // Max unsigned integer value
-    uint256 constant internal MAX_UINT_256 = type(uint256).max;
+    uint256 internal constant MAX_UINT_256 = type(uint256).max;
     // Max and min signed integer value
-    int256 constant internal MAX_INT_256 = type(int256).max;
-    int256 constant internal MIN_INT_256 = type(int256).min;
+    int256 internal constant MAX_INT_256 = type(int256).max;
+    int256 internal constant MIN_INT_256 = type(int256).min;
 
     /**
      * @dev Getter function since constants can't be read directly from libraries.
@@ -121,7 +120,6 @@ library PreciseUnitMath {
         return a.mul(PRECISE_UNIT).div(b);
     }
 
-
     /**
      * @dev Divides value a by value b (result is rounded towards 0).
      */
@@ -144,7 +142,7 @@ library PreciseUnitMath {
      */
     function preciseDivCeil(int256 a, int256 b) internal pure returns (int256) {
         require(b != 0, "Cant divide by 0");
-        
+
         a = a.mul(PRECISE_UNIT_INT);
         int256 c = a.div(b);
 
@@ -188,20 +186,13 @@ library PreciseUnitMath {
     }
 
     /**
-    * @dev Performs the power on a specified value, reverts on overflow.
-    */
-    function safePower(
-        uint256 a,
-        uint256 pow
-    )
-        internal
-        pure
-        returns (uint256)
-    {
+     * @dev Performs the power on a specified value, reverts on overflow.
+     */
+    function safePower(uint256 a, uint256 pow) internal pure returns (uint256) {
         require(a > 0, "Value must be positive");
 
         uint256 result = 1;
-        for (uint256 i = 0; i < pow; i++){
+        for (uint256 i = 0; i < pow; i++) {
             uint256 previousResult = result;
 
             // Using safemath multiplication prevents overflows
@@ -221,7 +212,7 @@ library PreciseUnitMath {
     /**
      * Returns the absolute value of int256 `a` as a uint256
      */
-    function abs(int256 a) internal pure returns (uint) {
+    function abs(int256 a) internal pure returns (uint256) {
         return a >= 0 ? a.toUint256() : a.mul(-1).toUint256();
     }
 

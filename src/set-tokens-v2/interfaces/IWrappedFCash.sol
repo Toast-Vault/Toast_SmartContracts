@@ -22,12 +22,8 @@ interface IWrappedfCash {
     function initialize(uint16 currencyId, uint40 maturity) external;
 
     /// @notice Mints wrapped fCash ERC20 tokens
-    function mintViaAsset(
-        uint256 depositAmountExternal,
-        uint88 fCashAmount,
-        address receiver,
-        uint32 minImpliedRate
-    ) external;
+    function mintViaAsset(uint256 depositAmountExternal, uint88 fCashAmount, address receiver, uint32 minImpliedRate)
+        external;
 
     function mintViaUnderlying(
         uint256 depositAmountExternal,
@@ -64,5 +60,4 @@ interface IWrappedfCash {
     function getToken(bool useUnderlying) external view returns (IERC20 token, bool isETH);
 }
 
-
-interface IWrappedfCashComplete is IWrappedfCash, IERC20 {} 
+interface IWrappedfCashComplete is IWrappedfCash, IERC20 {}

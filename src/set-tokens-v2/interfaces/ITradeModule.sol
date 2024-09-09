@@ -18,7 +18,7 @@
 pragma solidity 0.6.10;
 pragma experimental "ABIEncoderV2";
 
-import { ISetToken } from "./ISetToken.sol";
+import {ISetToken} from "./ISetToken.sol";
 
 interface ITradeModule {
     function initialize(ISetToken _setToken) external;

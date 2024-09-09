@@ -26,7 +26,6 @@ pragma solidity 0.6.10;
  * library functionality.
  */
 library BytesArrayUtils {
-
     /**
      * Type cast byte to boolean.
      * @param _bytes        Bytes array
@@ -42,7 +41,7 @@ library BytesArrayUtils {
             tempUint := mload(add(add(_bytes, 0x1), _start))
         }
 
-        require(tempUint <= 1, "Invalid bool data");     // Should be either 0 or 1
+        require(tempUint <= 1, "Invalid bool data"); // Should be either 0 or 1
 
         return (tempUint == 0) ? false : true;
     }

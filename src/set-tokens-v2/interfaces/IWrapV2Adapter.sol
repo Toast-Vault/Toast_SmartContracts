@@ -17,13 +17,11 @@
 */
 pragma solidity 0.6.10;
 
-
 /**
  * @title IWrapV2Adapter
  * @author Set Protocol
  */
 interface IWrapV2Adapter {
-
     function ETH_TOKEN_ADDRESS() external view returns (address);
 
     function getWrapCallData(
@@ -42,5 +40,5 @@ interface IWrapV2Adapter {
         bytes memory _unwrapData
     ) external view returns (address _subject, uint256 _value, bytes memory _calldata);
 
-    function getSpenderAddress(address _underlyingToken, address _wrappedToken) external view returns(address);
+    function getSpenderAddress(address _underlyingToken, address _wrappedToken) external view returns (address);
 }

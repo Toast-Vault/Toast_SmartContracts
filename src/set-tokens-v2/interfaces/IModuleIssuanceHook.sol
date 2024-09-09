@@ -17,10 +17,9 @@
 */
 pragma solidity 0.6.10;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import { ISetToken } from "./ISetToken.sol";
-
+import {ISetToken} from "./ISetToken.sol";
 
 /**
  * CHANGELOG:
@@ -28,21 +27,12 @@ import { ISetToken } from "./ISetToken.sol";
  *        issue hooks
  */
 interface IModuleIssuanceHook {
-
     function moduleIssueHook(ISetToken _setToken, uint256 _setTokenQuantity) external;
     function moduleRedeemHook(ISetToken _setToken, uint256 _setTokenQuantity) external;
-    
-    function componentIssueHook(
-        ISetToken _setToken,
-        uint256 _setTokenQuantity,
-        IERC20 _component,
-        bool _isEquity
-    ) external;
 
-    function componentRedeemHook(
-        ISetToken _setToken,
-        uint256 _setTokenQuantity,
-        IERC20 _component,
-        bool _isEquity
-    ) external;
+    function componentIssueHook(ISetToken _setToken, uint256 _setTokenQuantity, IERC20 _component, bool _isEquity)
+        external;
+
+    function componentRedeemHook(ISetToken _setToken, uint256 _setTokenQuantity, IERC20 _component, bool _isEquity)
+        external;
 }

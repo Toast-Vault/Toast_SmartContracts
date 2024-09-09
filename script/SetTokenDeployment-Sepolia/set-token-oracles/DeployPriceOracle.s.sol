@@ -15,19 +15,10 @@ contract DeployPriceOracle is Script, ContractAddresses {
     bytes32[] _oracles = [usdc_usd, dai_usd, eth_usd, btc_usd, link_usd];
 
     function run() external returns (PriceOracle) {
-        uint256 deployerPrivateKey = vm.envUint(
-            "SET_TOKEN_MANAGER_PRIVATE_KEY"
-        );
+        uint256 deployerPrivateKey = vm.envUint("SET_TOKEN_MANAGER_PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        PriceOracle priceOracle = new PriceOracle(
-            controller,
-            pythAddress,
-            masterQuoteAsset,
-            _adapters,
-            _assetOnes,
-            _assetTwos,
-            _oracles
-        );
+        PriceOracle priceOracle =
+            new PriceOracle(controller, pythAddress, masterQuoteAsset, _adapters, _assetOnes, _assetTwos, _oracles);
         vm.stopBroadcast();
         console.log("Price oracle: %s", address(priceOracle));
         return priceOracle;

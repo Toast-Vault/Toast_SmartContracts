@@ -26,7 +26,5 @@ interface ISetTokenCreator {
         address _manager,
         string memory _name,
         string memory _symbol
-    )
-        external
-        returns (address);
+    ) external returns (address);
 }

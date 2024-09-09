@@ -10,16 +10,18 @@ import {IPyth} from "@setToken/contracts/interfaces/external/IPyth.sol";
 contract DeployPriceOracle is Script, ContractAddresses {
     address masterQuoteAsset = usdc;
     address[] _adapters;
-    address[] _assetOnes = [usdc, dai, wbtc, link];
-    address[] _assetTwos = [usdc, usdc, usdc, usdc];
-    bytes32[] _oracles = [usdc_usd, dai_usd, btc_usd, link_usd];
+    address[] _assetOnes = [usdc, dai, weth, wbtc, link];
+    address[] _assetTwos = [usdc, usdc, usdc, usdc, usdc];
+    bytes32[] _oracles = [usdc_usd, dai_usd, eth_usd, btc_usd, link_usd];
 
     function run() external returns (PriceOracle) {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envUint(
+            "SET_TOKEN_MANAGER_PRIVATE_KEY"
+        );
         vm.startBroadcast(deployerPrivateKey);
         PriceOracle priceOracle = new PriceOracle(
             controller,
-            pyth,
+            pythAddress,
             masterQuoteAsset,
             _adapters,
             _assetOnes,

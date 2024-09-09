@@ -10,10 +10,11 @@ abstract contract ContractAddresses {
     address dai = 0x48feC5d47182698Ec10D1c258d90dC9dB142de41;
     address wbtc = 0x714F7a3d1A3F33fB09CE13f5033C0E576Cd0cE8e;
     address link = 0x779877A7B0D9E8603169DdbD7836e478b4624789; // Token deployed by chainlink on Sepolia
+    address weth = 0x295349FBB6de65686382b20189632434894Ebe42;
 
     IController controller =
         IController(0x9Df9fef12Fa512315CC9F3e5C1D2faFf1bB04a72);
-    IPyth pyth = IPyth(0xDd24F84d36BF92C65F92307595335bdFab5Bbd21);
+    IPyth pythAddress = IPyth(0xDd24F84d36BF92C65F92307595335bdFab5Bbd21);
 
     // IOracle usdc_usd = IOracle(0xd9DC501B9E4437683ABfe83B377748Af7265b562);
     // IOracle dai_usdc = IOracle(0xdc51ab0258B5ff93E2CEea0cf6aAD6937E346FE0);

@@ -143,7 +143,6 @@ contract PriceOracle is Ownable {
 
         bool priceFound;
         uint256 price;
-
         (priceFound, price) = _getDirectOrInversePrice(_assetOne, _assetTwo);
 
         if (!priceFound) {
